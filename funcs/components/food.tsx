@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable} from 'react-native';
 import { useState } from 'react';
 import { useFonts } from 'expo-font';
+import AppLoading from 'expo-app-loading';
 
 import { 
   Bangers_400Regular 
@@ -23,23 +24,18 @@ function Food(props: any){
       )
 
     
-    const product_name = name
-    const product_price = price
+
     return (
         <View >
-            <Pressable onPress={callback}>
-
-                <Image source = {require(image)} style = {style.image}/>
+                <Image source = {image} style = {style.image}/>
 
                 <View>
-                    <Text style = {style.name}>
-                        product_name
-                    </Text>
+                    
                     <Text style= {style.price}>
-                        product_price
+                       {price}
                     </Text>
                 </View>
-            </Pressable>
+            
         </View>
     )
 }

@@ -1,4 +1,4 @@
-import User from "../assets/classes/user"
+import User from "../src/classes/user"
 import axios from "axios";
 const qs = require("qs")
 

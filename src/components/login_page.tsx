@@ -36,7 +36,7 @@ export default function Login() {
       
 
       
-      <Image style = { bufee_logo_style.burger} source={require("../assets/bufee_logo.png")}/>
+      <Image style = { bufee_logo_style.burger} source={require("../../assets/bufee_logo.png")}/>
 
       <Text style = {bufee_logo_style.text}>BUFEE</Text>
 

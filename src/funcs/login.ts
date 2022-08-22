@@ -1,4 +1,4 @@
-import User from "../src/classes/user"
+import User from "../classes/user"
 import axios from "axios";
 const qs = require("qs")
 

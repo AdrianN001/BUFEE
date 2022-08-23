@@ -1,7 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button, KeyboardAvoidingView } from 'react-native';
-import { useState } from 'react';
+import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button, KeyboardAvoidingView, Pressable, Animated, Touchable, TouchableWithoutFeedback} from 'react-native';
+import { useState, useEffect, useRef } from 'react';
 import { useFonts } from 'expo-font';
+import Register_Page from './register';
 
 import { 
   Bangers_400Regular 
@@ -17,12 +18,23 @@ export default function Login() {
 
   let [om_id, setOMID] = useState("")
   let [password, setPassword] = useState("")
+  let [register, setRegister] = useState(false)
 
+  const translation = useRef(new Animated.Value(0)).current;
 
+  useEffect(() => {
+    Animated.timing(translation,
+      {
+        toValue: 10,
+        useNativeDriver:true
+      }).start();
+  })
+  
   let [fontsLoad] = useFonts(
     {
       Bangers_400Regular,
-      BubblerOne_400Regular
+      BubblerOne_400Regular,
+      'Glory': require("../../assets/fonts/Glory.ttf")
     }
   )
 
@@ -32,28 +44,57 @@ export default function Login() {
 
 
   return (
-    <View style={styles.container}>
+      
+      
+    <View style={styles.container} >
       
 
       
-      <Image style = { bufee_logo_style.burger} source={require("../../assets/bufee_logo.png")}/>
+        <Image style = { bufee_logo_style.burger} source={require("../../assets/bufee_logo.png")}/>
 
-      <Text style = {bufee_logo_style.text}>BUFEE</Text>
+        <Text style = {bufee_logo_style.text}>BUFEE</Text>
 
-      <View style = {input_styles.padding} >
-        <TextInput value = {om_id} onChangeText= {text => setOMID(text)} style = {input_styles.om_id} placeholder = "                OM Azonositó"/>
+        <View style = {input_styles.padding} >
+          <TextInput value = {om_id} onChangeText= {text => setOMID(text)} style = {input_styles.om_id} placeholder = "                OM Azonositó"/>
 
-        <TextInput  value = {password} onChangeText= {text => setPassword(text)} style = {input_styles.password} placeholder='                     Jelszó'/> 
+          <TextInput  value = {password} onChangeText= {text => setPassword(text)} style = {input_styles.password} placeholder='                     Jelszó'/> 
 
-        <View style = {input_styles.button} >
-          <Button title = 'Bejelentkezés' color= "#392580" onPress={() => console.log(om_id, password)}/>
+          <View style = {input_styles.button} >
+            <Button title = 'Bejelentkezés' color= "#392580" onPress={() => console.log(om_id, password)}/>
+          </View>
         </View>
-      </View>
+        <View style = {input_styles.register}>
+          <Pressable onPress={() => setRegister(true)}><Text >Nincs még Fiókod?</Text></Pressable>
+        </View>
+
+        {register && 
+        
+          <Animated.View style = {{
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0,0,0,0.8)",
+            transform: [{translateY:translation}]
+            
+          }}>
+            
+              <TouchableWithoutFeedback onPress={()=>setRegister(false)}><Image source = {require("../../assets/exit_button.png")} style = {{position:'absolute',top:"25%",right:"20%", width: 25, height: 25, zIndex:2}}></Image></TouchableWithoutFeedback>
+              <Register_Page/>
+            
+          </Animated.View>
+        
+        
+        }
+
+
+
+
 
 
       <StatusBar style="auto" />
-      
+
     </View>
+      
+      
   );
 }
 
@@ -90,7 +131,7 @@ const bufee_logo_style = StyleSheet.create(
     },
     text: 
     {
-      fontFamily : "BubblerOne_400Regular",
+      fontFamily : "Glory",
       color: "#E17676",
       fontSize: 40, 
       position: 'absolute',
@@ -152,6 +193,12 @@ const input_styles = StyleSheet.create(
       borderRadius: 20
       
     },
+    register:
+    {
+      position:"absolute",
+      color:'#000',
+      bottom: "15%"
+    }
     
   }
 )

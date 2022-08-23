@@ -5,6 +5,6 @@ import Food_page from './src/components/food_page';
 
 export default function App() {
 
-  return (<Food_page/>)
+  return (<Login/>)
   
 }

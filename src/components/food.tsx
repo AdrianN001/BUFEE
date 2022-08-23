@@ -19,7 +19,8 @@ function Food(props: any): JSX.Element{  //props-nak nem lehet Interface-t megad
     const {image, name, price, id, callback} = props
    
     const [loaded] = useFonts({
-        'Glory' : require("../../assets/fonts/Glory.ttf")
+        'Glory' : require("../../assets/fonts/Glory.ttf"),
+        'JetBrains-Mono': require("../../assets/fonts/JetBrainsMono.ttf")
         })
     if (!loaded)
     {
@@ -48,6 +49,8 @@ function Food(props: any): JSX.Element{  //props-nak nem lehet Interface-t megad
 const style = StyleSheet.create(
     {
         container: {
+
+            height:125,
             marginTop:"5%",
             marginRight: "5%",
             marginBottom: 0,
@@ -88,7 +91,7 @@ const style = StyleSheet.create(
           
           color: "#E17676",
           fontSize:36,
-          fontFamily: "Glory"
+          fontFamily: "JetBrains-Mono"
         
            
         },
@@ -103,7 +106,7 @@ const style = StyleSheet.create(
         tocart:
         {
             position:'absolute',
-            top:39,
+            top:44,
             right: 10,
             height: 30,
             width: 30,

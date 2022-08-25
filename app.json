@@ -18,14 +18,16 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "bufee.app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF",
         "softwareKeyboardLayoutMode": "adjustpan"
-      }
+      },
+      "package": "bufee.app"
     },
     "web": {
       "favicon": "./assets/favicon.png"

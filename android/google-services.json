@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "951449394417",
+    "project_id": "bufee-001",
+    "storage_bucket": "bufee-001.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:951449394417:android:030ef72bab4cd62ed01d50",
+        "android_client_info": {
+          "package_name": "bufee.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "951449394417-jpumse58s5dlquragb47akgsomr5ouf0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNvpwmmv2zrqiUrm3sGUGPOtWAvu6x80g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "951449394417-jpumse58s5dlquragb47akgsomr5ouf0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

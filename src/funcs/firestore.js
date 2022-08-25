@@ -36,24 +36,19 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-var mongodb_1 = require("mongodb");
-var URI = "mongodb+srv://admindev123:admindev123@bufee.2mf2b8y.mongodb.net/";
-var client = new mongodb_1.MongoClient(URI);
-var dbName = 'users';
+var firestore_1 = require("@react-native-firebase/firestore");
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var db, collection;
+        var resp;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, client.connect()];
+                case 0: return [4 /*yield*/, (0, firestore_1["default"])().collection("users").doc("H5qLxIMMZqsC1YqNEjuj").get()];
                 case 1:
-                    _a.sent();
-                    console.log("Succesfuly connected");
-                    db = client.db(dbName);
-                    collection = db.collection("users");
-                    return [2 /*return*/, 'done.'];
+                    resp = _a.sent();
+                    console.log(resp);
+                    return [2 /*return*/];
             }
         });
     });
 }
-main().then(console.log)["catch"](console.error)["finally"](function () { return client.close(); });
+main();

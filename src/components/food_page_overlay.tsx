@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView} from 'react-native';
 import { useFonts } from '@expo-google-fonts/dev';
+import React from 'react';
 
 
 

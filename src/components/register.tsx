@@ -2,8 +2,9 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button, KeyboardAvoidingView, Pressable, Animated, TouchableWithoutFeedback} from 'react-native';
 import { useState, useEffect, useRef } from 'react';
 import { useFonts } from 'expo-font';
-import {update_collection} from "../funcs/mongo"
 import { User_Data } from '../classes/user';
+import { add_User } from '../funcs/firestore';
+import React from 'react';
 
 
 
@@ -27,7 +28,7 @@ function Register_Page()
                 <TextInput  value = {class_} onChangeText= {text => setClass_(text)} style = {input_styles.password} placeholder='                     Osztály'/> 
 
                 <View style = {input_styles.button} >
-                <Button title = 'Regisztráció' color= "#554A47" onPress={() => update_collection(om_id,password,name,class_)}/>
+                <Button title = 'Regisztráció' color= "#554A47" onPress={() => add_User(om_id,password,name,class_)}/>
                 </View>
             </View>
             

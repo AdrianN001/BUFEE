@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useFonts } from 'expo-font';
 import { Glory_100Thin } from '@expo-google-fonts/dev';
 import AppLoading from 'expo-app-loading';
+import React from 'react';
 
 
 interface FoodInterface{

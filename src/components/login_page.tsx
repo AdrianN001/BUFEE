@@ -12,6 +12,7 @@ import {
 } from '@expo-google-fonts/bubbler-one'
 
 import AppLoading from 'expo-app-loading';
+import React from 'react';
 
 
 export default function Login() {

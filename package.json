@@ -12,6 +12,8 @@
     "@expo-google-fonts/bubbler-one": "^0.2.2",
     "@expo-google-fonts/dev": "^0.2.2",
     "@expo/webpack-config": "^0.17.2",
+    "@react-native-firebase/app": "^15.3.0",
+    "@react-native-firebase/firestore": "^15.3.0",
     "axios": "^0.27.2",
     "crypto": "^1.0.1",
     "dns": "^0.2.2",
@@ -19,6 +21,7 @@
     "expo-app-loading": "~2.1.0",
     "expo-crypto": "~11.0.0",
     "expo-font": "~10.2.0",
+    "expo-splash-screen": "~0.16.2",
     "expo-status-bar": "~1.4.0",
     "qs": "^6.11.0",
     "react": "18.0.0",
@@ -28,8 +31,7 @@
     "react-native-web": "~0.18.7",
     "stream": "^0.0.2",
     "timers": "^0.1.1",
-    "zlib": "^1.0.5",
-    "expo-splash-screen": "~0.16.2"
+    "zlib": "^1.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

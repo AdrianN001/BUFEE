@@ -1,6 +1,6 @@
 class User
 {
-    private name: string;
+    private name: string ;
     private class_: string;
 
     private om_id: string;
@@ -20,6 +20,20 @@ class User
         this.prev_orders = userdata.prev_orders
 
     }
+
+    get _name()
+    {
+        return this.name
+    }
+    get _class()
+    {
+        return this.class_
+    }
+    get _omid()
+    {
+        return this.om_id
+    }
+
 
 
 

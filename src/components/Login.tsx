@@ -1,8 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button, KeyboardAvoidingView, Pressable, Animated, Touchable, TouchableWithoutFeedback} from 'react-native';
+import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button, KeyboardAvoidingView, Pressable, Animated, Touchable, TouchableWithoutFeedback, Alert} from 'react-native';
 import { useState, useEffect, useRef } from 'react';
 import { useFonts } from 'expo-font';
 import Register_Page from './register';
+import try_login,{ LOGIN_RESPONSE } from '../funcs/login';
 
 import { 
   Bangers_400Regular 
@@ -15,11 +16,33 @@ import AppLoading from 'expo-app-loading';
 import React from 'react';
 
 
-export default function Login() {
+const button_function = async(om_id: string, password: string) => 
+{
+    const response = await try_login(om_id, password);
+
+    switch (response)
+    {
+      case LOGIN_RESPONSE.WRONG_OMID:
+        Alert.alert("HIBA", "Ezzel az OM Azonositóval még nem regisztráltak");
+        break;
+      case LOGIN_RESPONSE.WRONG_PASSWORD:
+        Alert.alert("HIBA", "Hibás Jelszó");
+        break
+      
+    }
+
+    return response === LOGIN_RESPONSE.OK ? true: false;
+}
+
+
+export default function Login(props: any) {
 
   let [om_id, setOMID] = useState("")
   let [password, setPassword] = useState("")
   let [register, setRegister] = useState(false)
+
+  
+
 
   const translation = useRef(new Animated.Value(0)).current;
 
@@ -61,9 +84,19 @@ export default function Login() {
           <TextInput  value = {password} onChangeText= {text => setPassword(text)} style = {input_styles.password} placeholder='                     Jelszó'/> 
 
           <View style = {input_styles.button} >
-            <Button title = 'Bejelentkezés' color= "#392580" onPress={() => console.log(om_id, password)}/>
+            <Button title = 'Bejelentkezés' color= "#392580" onPress={async () =>{
+                      const can_login = await button_function(om_id,password);
+                      if (!can_login) return;
+                      else {
+                        props.onLogin({can_login, om_id})
+                      }
+                      
+              }}/>
           </View>
         </View>
+
+
+
         <View style = {input_styles.register}>
           <Pressable onPress={() => setRegister(true)}><Text >Nincs még Fiókod?</Text></Pressable>
         </View>

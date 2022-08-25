@@ -1,11 +1,35 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button, KeyboardAvoidingView, Pressable, Animated, TouchableWithoutFeedback} from 'react-native';
+import { StyleSheet, Text, View,Alert, Image, SafeAreaView, TextInput,  Button, KeyboardAvoidingView, Pressable, Animated, TouchableWithoutFeedback, AlertStatic} from 'react-native';
 import { useState, useEffect, useRef } from 'react';
 import { useFonts } from 'expo-font';
 import { User_Data } from '../classes/user';
-import { add_User } from '../funcs/firestore';
+import { add_User, REGISTER_RESPONSE } from '../funcs/firestore';
 import React from 'react';
 
+
+async function register(om_id: string,password: string,name: string,class_: string)
+{
+    const reponse = await add_User(om_id, password,name, class_)
+    
+    
+
+    switch (reponse)
+    {
+      case REGISTER_RESPONSE.ALREADY_REGISTERED:
+          Alert.alert("HIBA", "Ezzel az OM Azonosítóval már regisztráltak", [{text:"OK"}])
+          break
+      case REGISTER_RESPONSE.INVALID_CLASS:
+          Alert.alert("HIBA", "Hibás osztály formátum: \n Probáld meg így: '11. E' vagy '11.E' ")
+          break
+      case REGISTER_RESPONSE.INVALID_OMID:
+          Alert.alert("HIBA", "Hibás OM Azonosító")
+          break
+      case REGISTER_RESPONSE.OK:
+          Alert.alert("Sikeres Regisztráció", "Üdvözöllek a BUFEE appban")
+          break
+    }
+
+}
 
 
 function Register_Page()
@@ -19,16 +43,16 @@ function Register_Page()
     return (<>
             <View style = {input_styles.padding} >
                 
-                <TextInput value = {om_id} onChangeText= {text => setOMID(text)} style = {{...input_styles.om_id, marginTop:35}} placeholder = "                OM Azonositó"/>
+                <TextInput value = {om_id} onChangeText= {text => setOMID(text)} style = {{...input_styles.om_id, marginTop:35}} placeholder = "                  OM Azonositó"/>
 
-                <TextInput  value = {password} onChangeText= {text => setPassword(text)} style = {input_styles.password} placeholder='                     Jelszó'/> 
+                <TextInput  value = {password} onChangeText= {text => setPassword(text)} style = {input_styles.password} placeholder='                       Jelszó'/> 
 
-                <TextInput value = {name} onChangeText= {text => setName(text)} style = {{...input_styles.om_id, marginTop: 50}} placeholder = "                Teljes Neved"/>
+                <TextInput value = {name} onChangeText= {text => setName(text)} style = {{...input_styles.om_id, marginTop: 50}} placeholder = "                  Teljes Neved"/>
 
-                <TextInput  value = {class_} onChangeText= {text => setClass_(text)} style = {input_styles.password} placeholder='                     Osztály'/> 
+                <TextInput  value = {class_} onChangeText= {text => setClass_(text)} style = {input_styles.password} placeholder='                        Osztály'/> 
 
                 <View style = {input_styles.button} >
-                <Button title = 'Regisztráció' color= "#554A47" onPress={() => add_User(om_id,password,name,class_)}/>
+                  <Button title = 'Regisztráció' color= "#554A47" onPress={() => register(om_id,password,name,class_)}/>
                 </View>
             </View>
             

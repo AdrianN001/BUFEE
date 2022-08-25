@@ -58,7 +58,7 @@ const style = StyleSheet.create(
             position: 'absolute',
             marginTop : 20,
             top: "100%",
-            right: "31%",
+            right: "35%",
             fontSize:40,
             fontFamily:'Caveat',
             color:"#E17676",

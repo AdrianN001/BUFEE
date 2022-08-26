@@ -23,8 +23,8 @@ const style = StyleSheet.create(
         text:
         {
             position:'absolute',
-            top:"-18%",
-            left:"40%",
+            top:"-8%",
+            left:"60%",
 
             color:"#fff",
             fontSize: 17,

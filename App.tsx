@@ -22,6 +22,6 @@ export default function App() {
   //   setglobalOMID(om_id)
   // }}/>)
 
-  return <Food_page></Food_page>
+  return <Food_page om_id = {globalOMID}></Food_page>
   
 }

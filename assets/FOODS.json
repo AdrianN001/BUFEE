@@ -1,25 +1,25 @@
 [
     {
         "id":1,
-        "nev":"Sonkás Kukoricás Melegszendvics",
+        "nev":"Sonkás Kukoricás \nMelegszendvics",
         "price":400,
         "image":"asd"
     },
     {
         "id":2,
-        "nev":"Sonkás Sajtos Melegszendvics",
+        "nev":"Sonkás Sajtos \nMelegszendvics",
         "price":400,
         "image":"asd"
     },
     {
         "id":3,
-        "nev":"Sonkás Gombás Melegszendvics",
+        "nev":"Sonkás Gombás \nMelegszendvics",
         "price":400,
         "image":"asd"
     },
     {
         "id":4,
-        "nev":"Bacon-os Melegszendvics",
+        "nev":"Bacon-os \nMelegszendvics",
         "price":400,
         "image":"asd"
     }

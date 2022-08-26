@@ -1,13 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView} from 'react-native';
+import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView, Alert} from 'react-native';
 import { useState, Children, useRef } from 'react';
 import { useFonts } from 'expo-font';
-import Food from './food';
+import Food, {FoodInterface} from './food';
 import Overlay from './food_page_overlay';
 import CartButton from './cart-button';
 import React from 'react';
 
-const FOODS = Array.from(require("../../assets/FOODS.json"))
+const FOODS: FoodInterface[] = Array.from(require("../../assets/FOODS.json"))
 
 
 function Food_page(props: any)
@@ -15,16 +15,14 @@ function Food_page(props: any)
     const [positon, setPosition] = useState(0);
     const [height, setHeight] = useState(0);
 
-    const [bucket, setBucket] = useState<object[]>([{asd:'xd'}]);
+    const [bucket, setBucket] = useState<FoodInterface[]>();
+
+    const om_id: string = props.om_id
+    
     
 
-    console.log(bucket.length)
+    console.log(bucket)
 
-    let children_count = 0 //feltoltesnel majd megnoveli
-
-    console.log(positon)
-    console.log(children_count)
-    console.log(`HEIGHT: ${height }`)
 
 
     return(
@@ -41,15 +39,29 @@ function Food_page(props: any)
                         
                             <View style = {style.container} >
 
-                                        
-                                
+                                        {
+                                        FOODS.map(({id, nev, price, image}) =>{
+                                            
+                                            return (<Food key = {id} stlye = {style.food} image ={require("../../assets/icon.png")} name = {nev} price = {`${price} Ft.`} order_function = {() => {
+                                                const bucket_1 = bucket ?? []
+
+                                                if (bucket_1.length >= 5)
+                                                {
+                                                    Alert.alert("HIBA", "Legfeljebb 5 dolgot rendelhetsz egyszerre")
+                                                    return;
+                                                }
+                                                setBucket([...bucket_1 , {id, nev, price, image}])}
+                                            }/>)
+                                        })
+                                    }     
+{/*                                 
                                     <Food style = {style.food} image = {require("../../assets/icon.png")} />
                                     <Food style = {style.food} image = {require("../../assets/icon.png")} />
                                     <Food style = {style.food} image = {require("../../assets/icon.png")} name = "Sajtos  Csiga" price = "5000 Ft"/>
                                     <Food style = {style.food} image = {require("../../assets/icon.png")} />
                                     <Food style = {style.food} image = {require("../../assets/icon.png")} />
                                     <Food style = {style.food} image = {require("../../assets/icon.png")} />
-                                    <Food style = {style.food} image = {require("../../assets/icon.png")} />
+                                    <Food style = {style.food} image = {require("../../assets/icon.png")} /> */}
 
 
                             
@@ -58,8 +70,8 @@ function Food_page(props: any)
                         
                 </ScrollView>
 
-                {bucket.length > 1 && <View style = {style.cartbutton} >
-                    <CartButton count = {bucket.length}/>
+                {bucket && bucket?.length >= 1 && <View style = {style.cartbutton} >
+                    <CartButton count = {bucket?.length}/>
                 </View>}
                 
                 <View style = {style.overlay}>

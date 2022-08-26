@@ -7,9 +7,9 @@ import AppLoading from 'expo-app-loading';
 import React from 'react';
 
 
-interface FoodInterface{
+export interface FoodInterface{
     image:number // require(image) -->
-    name: string
+    nev: string
     price: string //lehetne int is 
     id: number
     callback?: () => void
@@ -43,7 +43,7 @@ function Food(props: any): JSX.Element{  //props-nak nem lehet Interface-t megad
 
 
                 </View>
-                <Pressable><View><Image style = {style.tocart} source ={ require("../../assets/to-cart.png")}/></View></Pressable>
+                <Pressable onPress={props.order_function}><View><Image style = {style.tocart} source ={ require("../../assets/to-cart.png")}/></View></Pressable>
             </View>)
 }
 

@@ -5,6 +5,7 @@ import { useFonts } from 'expo-font';
 import Food, {FoodInterface} from './food';
 import Overlay from './food_page_overlay';
 import CartButton from './cart-button';
+import SearchEngine from './search_engine';
 import React from 'react';
 
 const FOODS: FoodInterface[] = Array.from(require("../../assets/FOODS.json"))
@@ -16,12 +17,14 @@ function Food_page(props: any)
     const [height, setHeight] = useState(0);
 
     const [bucket, setBucket] = useState<FoodInterface[]>();
+    const [searching, setSearch] = useState<boolean>(false);
+
+    const [filter, setFilter] = useState<string>("");
 
     const om_id: string = props.om_id
     
-    
+    console.log(new RegExp(filter).test("Sonkás Gombás \nMelegszendvics"))
 
-    console.log(bucket)
 
 
 
@@ -41,18 +44,25 @@ function Food_page(props: any)
 
                                         {
                                         FOODS.map(({id, nev, price, image}) =>{
-                                            
-                                            return (<Food key = {id} stlye = {style.food} image ={require("../../assets/icon.png")} name = {nev} price = {`${price} Ft.`} order_function = {() => {
-                                                const bucket_1 = bucket ?? []
+                                                
 
-                                                if (bucket_1.length >= 5)
+                                                if (new RegExp(filter).test(nev))
                                                 {
-                                                    Alert.alert("HIBA", "Legfeljebb 5 dolgot rendelhetsz egyszerre")
-                                                    return;
+                                                    return (<Food key = {id} stlye = {style.food} image ={require("../../assets/icon.png")} name = {nev} price = {`${price} Ft.`} order_function = {() => {
+                                                        const bucket_1 = bucket ?? []
+        
+                                                        if (bucket_1.length >= 5)
+                                                        {
+                                                            Alert.alert("HIBA", "Legfeljebb 5 dolgot rendelhetsz egyszerre")
+                                                            return;
+                                                        }
+                                                        setBucket([...bucket_1 , {id, nev, price, image}])}
+                                                    }/>)
                                                 }
-                                                setBucket([...bucket_1 , {id, nev, price, image}])}
-                                            }/>)
-                                        })
+                                            
+                                                
+                                            
+                                                })
                                     }     
 {/*                                 
                                     <Food style = {style.food} image = {require("../../assets/icon.png")} />
@@ -69,6 +79,13 @@ function Food_page(props: any)
                             </View>
                         
                 </ScrollView>
+                
+                {searching && <View style = {style.searchengine}>
+                    
+                    <SearchEngine updateSearch = {(text:string) => setFilter(text)} />
+                   
+                </View>}
+                
 
                 {bucket && bucket?.length >= 1 && <View style = {style.cartbutton} >
                     <CartButton count = {bucket?.length}/>
@@ -76,7 +93,7 @@ function Food_page(props: any)
                 
                 <View style = {style.overlay}>
                     
-                    <Overlay />
+                    <Overlay activateSearch = {() => setSearch(!searching)}/>
                 </View>
                 
                             
@@ -141,7 +158,25 @@ const style = StyleSheet.create({
         height: "100%",
         //backgroundColor: "rgba(0,0,0,0.8)",
         opacity:.9
-    }
+    },
+    searchengine:
+    {
+        position:'absolute',
+        top:"20%",
+        right:"15%",
+        width:"70%",
+        height:"30%",
+        borderColor:"#f5c4c4"
+        
+    },
+    // searchengine_margin:
+    // {
+    //     backgroundColor:"#f5c4c4",
+
+    // }
+    
+    
+    
 })
 
 

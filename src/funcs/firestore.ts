@@ -1,11 +1,11 @@
 import firestore from "@react-native-firebase/firestore";
 
-async function main() {
-    const resp = await firestore().collection("users").doc("H5qLxIMMZqsC1YqNEjuj").get()
+// async function main() {
+//     const resp = await firestore().collection("users").doc("H5qLxIMMZqsC1YqNEjuj").get()
 
-    console.log(resp)
-} 
-main()
+//     console.log(resp)
+// } 
+// main()
 
 enum REGISTER_RESPONSE{
     INVALID_OMID,
@@ -25,7 +25,7 @@ async function add_User(om_id: string,password: string,name: string,class_: stri
     {
         return REGISTER_RESPONSE.INVALID_OMID
     }
-    else if  (await firestore().collection("users").where("om_id", "==", om_id).get() === null)
+    else if  (await (await firestore().collection("users").where("om_id", "==", om_id).get()).docs.length !== 0)
     {
         return REGISTER_RESPONSE.ALREADY_REGISTERED;
     }

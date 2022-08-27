@@ -21,9 +21,8 @@ function Food_page(props: any)
 
     const [filter, setFilter] = useState<string>("");
 
-    const om_id: string = props.om_id
-    
-    console.log(new RegExp(filter).test("Sonkás Gombás \nMelegszendvics"))
+    const om_id: string = props.om_id;
+
 
 
 
@@ -36,7 +35,7 @@ function Food_page(props: any)
 
 
             
-                <ScrollView style= {{backgroundColor: ""}} onScroll = {e => setPosition(e.nativeEvent.contentOffset.y)} >
+                <ScrollView  onScroll = {e => setPosition(e.nativeEvent.contentOffset.y)} >
                         
                         
                         

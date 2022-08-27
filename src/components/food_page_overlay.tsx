@@ -1,11 +1,38 @@
-import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView} from 'react-native';
+import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView, Animated} from 'react-native';
 import { useFonts } from '@expo-google-fonts/dev';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 
 
 function Overlay(props: any)
 {
+    //const blink_animation = useRef(new Animated.Value(1)).current;
+
+    // useEffect(() => {
+    //     Animated.loop(
+    //         Animated.sequence([
+    //             Animated.timing(
+    //                 blink_animation,
+    //                 {
+    //                     toValue: 0,
+    //                     duration: 300,
+    //                     useNativeDriver: true
+    //                 }
+    //             ),Animated.timing(
+    //                 blink_animation,
+    //                 {
+    //                     toValue: 1,
+    //                     duration: 400,
+    //                     useNativeDriver: true
+    //                 }
+    //             )
+    //         ]
+    //         )
+    //     ).start()
+
+    // },[])
+
+    
 
     let [loaded] = useFonts(
         {
@@ -20,7 +47,12 @@ function Overlay(props: any)
     return (
         <View>
             <Pressable><Image source = {require("../../assets/history_button.png")} style = {style.history}></Image></Pressable>
-            <Pressable onPress={props.activateSearch}><Text style = {style.text}>BUFEE</Text></Pressable>
+            <Pressable onPress={props.activateSearch}>
+                <Text style = {style.text} >
+                    BUFEE
+                    
+                </Text>
+            </Pressable>
             <Pressable><Image source = {require("../../assets/profile_button.png")} style = {style.profile}></Image></Pressable>
         </View>
     )

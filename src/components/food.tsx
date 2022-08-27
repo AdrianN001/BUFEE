@@ -107,7 +107,7 @@ const style = StyleSheet.create(
         tocart:
         {
             position:'absolute',
-            top:44,
+            top:55,
             right: 10,
             height: 30,
             width: 30,

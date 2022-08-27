@@ -17,11 +17,11 @@ export default function App() {
   console.log(globalOMID)
 
 
-  // return ( <Login  onLogin = {({can_login, om_id} : LOGIN_PAYLOAD) => {
-  //   setLogedIn(can_login);
-  //   setglobalOMID(om_id)
-  // }}/>)
+  return ( <Login  onLogin = {({can_login, om_id} : LOGIN_PAYLOAD) => {
+    setLogedIn(can_login);
+    setglobalOMID(om_id)
+  }}/>)
 
-  return <Food_page om_id = {globalOMID}></Food_page>
+  // return <Food_page om_id = {globalOMID}></Food_page>
   
 }

@@ -11,8 +11,12 @@ export default function SearchEngine(props:any)
 
     return (
         <View style = {style.border}><TextInput value = {search } style = {style.searchbar} onChangeText = {(text: string) => {
-            setSearch(text)
-            props.updateSearch(text)
+            if (text !== "\\")
+            {
+
+                setSearch(text)
+                props.updateSearch(text)
+            }
         }}/></View>
         
     )

@@ -25,7 +25,7 @@ async function add_User(om_id: string,password: string,name: string,class_: stri
     {
         return REGISTER_RESPONSE.INVALID_OMID
     }
-    else if  (await firestore().collection("users").where("om_id", "==", om_id).get() != null)
+    else if  (await firestore().collection("users").where("om_id", "==", om_id).get() === null)
     {
         return REGISTER_RESPONSE.ALREADY_REGISTERED;
     }

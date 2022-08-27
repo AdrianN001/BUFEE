@@ -48,7 +48,7 @@ function Food_page(props: any)
 
                                                 if (new RegExp(filter).test(nev))
                                                 {
-                                                    return (<Food key = {id} stlye = {style.food} image ={require("../../assets/icon.png")} name = {nev} price = {`${price} Ft.`} order_function = {() => {
+                                                    return (<Food key = {id} stlye = {style.food} image ={require("../../assets/icon.png")} name = {nev} price = {`${price} Ft`} order_function = {() => {
                                                         const bucket_1 = bucket ?? []
         
                                                         if (bucket_1.length >= 5)
@@ -82,8 +82,9 @@ function Food_page(props: any)
                 
                 {searching && <View style = {style.searchengine}>
                     
+
                     <SearchEngine updateSearch = {(text:string) => setFilter(text)} />
-                   
+                    <View style = {style.searchengine_overlay}></View>
                 </View>}
                 
 
@@ -116,7 +117,8 @@ const style = StyleSheet.create({
     container: {
         showsVerticalScrollIndicator: true,
 
-        marginTop: "10%",
+        marginTop: "8%",
+        marginBottom:"10%",
         marginLeft: 15,
         backgroundColor: "",
         
@@ -169,11 +171,14 @@ const style = StyleSheet.create({
         borderColor:"#f5c4c4"
         
     },
-    // searchengine_margin:
-    // {
-    //     backgroundColor:"#f5c4c4",
+    searchengine_overlay:
+    {
+        backgroundColor:"rbga(232, 165, 165,0.8)",
+        
+        height:"80%",
+        width:"100%"
 
-    // }
+    }
     
     
     

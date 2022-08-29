@@ -1,5 +1,6 @@
 import Login from './src/components/Login';
 import Food_page from './src/components/food_page';
+import Profile from './src/components/profile';
 
 import React, { useRef, useState } from 'react';
 
@@ -17,11 +18,13 @@ export default function App() {
   console.log(globalOMID)
 
 
-  return ( <Login  onLogin = {({can_login, om_id} : LOGIN_PAYLOAD) => {
-    setLogedIn(can_login);
-    setglobalOMID(om_id)
-  }}/>)
+  // return ( <Login  onLogin = {({can_login, om_id} : LOGIN_PAYLOAD) => {
+  //   setLogedIn(can_login);
+  //   setglobalOMID(om_id)
+  // }}/>)
 
-  // return <Food_page om_id = {globalOMID}></Food_page>
+  
+
+  return <Food_page om_id = {"72555096472"}></Food_page>
   
 }

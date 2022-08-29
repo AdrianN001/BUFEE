@@ -1,4 +1,4 @@
-import firestore from "@react-native-firebase/firestore";
+import firestore, { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 
 // async function main() {
 //     const resp = await firestore().collection("users").doc("H5qLxIMMZqsC1YqNEjuj").get()
@@ -14,6 +14,18 @@ enum REGISTER_RESPONSE{
 
     OK
 }
+interface User_Model{
+    _id?: any
+
+    om_id: string,
+    name: string,
+
+    password:string,
+    class_: string,
+    
+    previus_order: string[]
+}
+
 
 
 async function add_User(om_id: string,password: string,name: string,class_: string): Promise< REGISTER_RESPONSE >{
@@ -40,14 +52,28 @@ async function add_User(om_id: string,password: string,name: string,class_: stri
 
     }
 }
-
-async function get_password(om_id: string) : Promise< string >  {
-    const response = await firestore().collection("users").where("om_id", "==", om_id).get()
-
-    return response.docs[0].data()['password']
+function get_password(om_id: string) : Promise< string >  {
+    return firestore().collection("users").where("om_id", "==", om_id).get().then(
+        data => (data.docs[0].data() as User_Model)['password']
+    ).catch(
+        err => {console.log("Valami nem jo"); 
+        return ""}
+    )
                                                             
     
     
 }
 
-export {add_User, REGISTER_RESPONSE, get_password}
+async function get_data(om_id: string): Promise< User_Model >{
+    const resp = await firestore().collection("users").where("om_id", "==", om_id).get()
+
+    const data = resp.docs[0]
+    return (data.data() as User_Model)
+                                          
+
+    
+}
+
+
+
+export {add_User, REGISTER_RESPONSE, get_password, get_data}

@@ -18,7 +18,10 @@ export interface FoodInterface{
 
 function Food(props: any): JSX.Element{  //props-nak nem lehet Interface-t megadni, mivel a babel nem kedvelne i guess
     const {image, name, price, id, callback} = props
-   
+    
+    const delete_ = props.delete
+
+
     const [loaded] = useFonts({
         'Glory' : require("../../assets/fonts/Glory.ttf"),
         'JetBrains-Mono': require("../../assets/fonts/JetBrainsMono.ttf")
@@ -43,7 +46,7 @@ function Food(props: any): JSX.Element{  //props-nak nem lehet Interface-t megad
 
 
                 </View>
-                <Pressable onPress={props.order_function}><View><Image style = {style.tocart} source ={ require("../../assets/to-cart.png")}/></View></Pressable>
+                <Pressable onPress={props.button_function}><View><Image style = {style.tocart} source ={ delete_ ? require("../../assets/trash.png") : require("../../assets/to-cart.png")}/></View></Pressable>
             </View>)
 }
 

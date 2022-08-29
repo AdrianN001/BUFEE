@@ -1,12 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView, Alert} from 'react-native';
+import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView, Alert, TouchableHighlight, TouchableOpacity} from 'react-native';
 import { useState, Children, useRef } from 'react';
 import { useFonts } from 'expo-font';
 import Food, {FoodInterface} from './food';
 import Overlay from './food_page_overlay';
 import CartButton from './cart-button';
 import SearchEngine from './search_engine';
+import Profile from './profile';
 import React from 'react';
+import History from './history';
+import Paying from './paying';
 
 const FOODS: FoodInterface[] = Array.from(require("../../assets/FOODS.json"))
 
@@ -17,9 +20,15 @@ function Food_page(props: any)
     const [height, setHeight] = useState(0);
 
     const [bucket, setBucket] = useState<FoodInterface[]>();
+
+    const [history,setHistory] = useState<boolean>(false);
+    const [profile, setProfile] = useState<boolean>(false);
     const [searching, setSearch] = useState<boolean>(false);
 
     const [filter, setFilter] = useState<string>("");
+
+
+    const [paying, setPaying] = useState<boolean>(false);
 
     const om_id: string = props.om_id;
 
@@ -30,26 +39,26 @@ function Food_page(props: any)
     return(
         < SafeAreaView style = {style.main} >
             <StatusBar style='auto'/>
-            
-            
 
 
-            
+
+
+
                 <ScrollView  onScroll = {e => setPosition(e.nativeEvent.contentOffset.y)} >
-                        
-                        
-                        
+
+
+
                             <View style = {style.container} >
 
                                         {
                                         FOODS.map(({id, nev, price, image}) =>{
-                                                
+
 
                                                 if (new RegExp(filter).test(nev))
                                                 {
-                                                    return (<Food key = {id} stlye = {style.food} image ={require("../../assets/icon.png")} name = {nev} price = {`${price} Ft`} order_function = {() => {
+                                                    return (<Food key = {id} stlye = {style.food} image ={require("../../assets/icon.png")} name = {nev} price = {`${price} Ft`} delete = {false} button_function = {() => {
                                                         const bucket_1 = bucket ?? []
-        
+
                                                         if (bucket_1.length >= 5)
                                                         {
                                                             Alert.alert("HIBA", "Legfeljebb 5 dolgot rendelhetsz egyszerre")
@@ -58,12 +67,12 @@ function Food_page(props: any)
                                                         setBucket([...bucket_1 , {id, nev, price, image}])}
                                                     }/>)
                                                 }
-                                            
-                                                
-                                            
+
+
+
                                                 })
-                                    }     
-{/*                                 
+                                    }
+{/*
                                     <Food style = {style.food} image = {require("../../assets/icon.png")} />
                                     <Food style = {style.food} image = {require("../../assets/icon.png")} />
                                     <Food style = {style.food} image = {require("../../assets/icon.png")} name = "Sajtos  Csiga" price = "5000 Ft"/>
@@ -73,35 +82,40 @@ function Food_page(props: any)
                                     <Food style = {style.food} image = {require("../../assets/icon.png")} /> */}
 
 
-                            
-                            
+
+
                             </View>
-                        
+
                 </ScrollView>
-                
+
                 {searching && <View style = {style.searchengine}>
-                    
+
 
                     <SearchEngine updateSearch = {(text:string) => setFilter(text)} />
                     <View style = {style.searchengine_overlay}></View>
                 </View>}
-                
 
-                {bucket && bucket?.length >= 1 && <View style = {style.cartbutton} >
-                    <CartButton count = {bucket?.length}/>
-                </View>}
-                
+
+                {bucket && bucket?.length >= 1 &&
+                    <View style = {style.cartbutton} >
+                        <TouchableOpacity onPress={() => setPaying(true)}>
+                            <CartButton count = {bucket?.length}/>
+                        </TouchableOpacity>
+                    </View>
+                }
+
                 <View style = {style.overlay}>
-                    
-                    <Overlay activateSearch = {() => setSearch(!searching)}/>
+                    <Overlay activateHistory = {() => setHistory(true)} activateProfile = {() => setProfile(true)} activateSearch = {() => setSearch(!searching)}/>
                 </View>
-                
-                            
-                
-            
-            
 
-            
+                {profile && <Profile style = {{ backgroundColor: "#000" }} omid = {om_id} setButton = {() => setProfile(false)}/>}
+                {history && <History style = {{ backgroundColor: "#000" }} omid = {om_id} setButton = {() => setHistory(false)}/>}
+                {paying && <Paying updateBucket = {(bucket: FoodInterface[]) => setBucket(bucket)} bucket = {bucket} back_button = {() => setPaying(false)}/>}
+
+
+
+
+
 
 
         </SafeAreaView >
@@ -120,14 +134,14 @@ const style = StyleSheet.create({
         marginBottom:"10%",
         marginLeft: 15,
         backgroundColor: "",
-        
+
         height:"100%",
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'center'
     },
     list :{
-        
+
         marginTop:"10%",
         alignItems:'center',
         height: "100%",
@@ -139,17 +153,17 @@ const style = StyleSheet.create({
     },
     overlay:
     {
-        
+
         position:'absolute',
         bottom:10,
-        
-       
+
+
         backgroundColor: "#222222",
         borderRadius: 30,
         height:100,
         width: "98%",
         alignSelf:'center'
-        
+
     },
     cartbutton:
     {
@@ -164,23 +178,23 @@ const style = StyleSheet.create({
     {
         position:'absolute',
         top:"20%",
-        right:"15%",
+        alignSelf:'center',
         width:"70%",
         height:"30%",
         borderColor:"#f5c4c4"
-        
+
     },
     searchengine_overlay:
     {
         backgroundColor:"rbga(232, 165, 165,0.8)",
-        
+
         height:"80%",
         width:"100%"
 
     }
-    
-    
-    
+
+
+
 })
 
 

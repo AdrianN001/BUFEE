@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView, Animated} from 'react-native';
+import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView, Animated, TouchableHighlight, TouchableOpacity} from 'react-native';
 import { useFonts } from '@expo-google-fonts/dev';
 import React, { useEffect, useRef } from 'react';
 
@@ -46,14 +46,14 @@ function Overlay(props: any)
 
     return (
         <View>
-            <Pressable><Image source = {require("../../assets/history_button.png")} style = {style.history}></Image></Pressable>
-            <Pressable onPress={props.activateSearch}>
+            <TouchableOpacity onPress={props.activateHistory}><Image source = {require("../../assets/history_button.png")} style = {style.history}></Image></TouchableOpacity>
+            <TouchableOpacity onPress={props.activateSearch}>
                 <Text style = {style.text} >
                     BUFEE
                     
                 </Text>
-            </Pressable>
-            <Pressable><Image source = {require("../../assets/profile_button.png")} style = {style.profile}></Image></Pressable>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={props.activateProfile}><Image source = {require("../../assets/profile_button.png")} style = {style.profile}></Image></TouchableOpacity>
         </View>
     )
 }

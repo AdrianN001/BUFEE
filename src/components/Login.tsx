@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button, Keyboa
 import { useState, useEffect, useRef } from 'react';
 import { useFonts } from 'expo-font';
 import Register_Page from './register';
+//import FlashMessage from 'react-native-flash-message';
 import try_login,{ LOGIN_RESPONSE } from '../funcs/login';
 
 import { 
@@ -89,6 +90,7 @@ export default function Login(props: any) {
                       if (!can_login) return;
                       else {
                         props.onLogin({can_login, om_id})
+                        
                       }
                       
               }}/>

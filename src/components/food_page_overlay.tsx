@@ -53,6 +53,7 @@ function Overlay(props: any)
                     
                 </Text>
             </TouchableOpacity>
+            
             <TouchableOpacity onPress={props.activateProfile}><Image source = {require("../../assets/profile_button.png")} style = {style.profile}></Image></TouchableOpacity>
         </View>
     )
@@ -89,8 +90,8 @@ const style = StyleSheet.create(
         {
             position: 'absolute',
             marginTop : 20,
-            top: "100%",
-            right: "35%",
+            alignSelf:'center',
+            justifyContent:'center',
             fontSize:40,
             fontFamily:'Caveat',
             color:"#E17676",
@@ -100,6 +101,7 @@ const style = StyleSheet.create(
             textShadowRadius: 20
             
         }
+        
     }
 )
 

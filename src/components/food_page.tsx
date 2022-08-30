@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView, Alert, TouchableHighlight, TouchableOpacity} from 'react-native';
-import { useState, Children, useRef } from 'react';
+import { useState, Children, useRef, useEffect } from 'react';
 import { useFonts } from 'expo-font';
 import Food, {FoodInterface} from './food';
 import Overlay from './food_page_overlay';
@@ -19,6 +19,9 @@ function Food_page(props: any)
     const [positon, setPosition] = useState(0);
     const [height, setHeight] = useState(0);
 
+    const food_container = useRef(null);
+
+
     const [bucket, setBucket] = useState<FoodInterface[]>();
 
     const [history,setHistory] = useState<boolean>(false);
@@ -32,9 +35,7 @@ function Food_page(props: any)
 
     const om_id: string = props.om_id;
 
-
-
-
+    
 
     return(
         < SafeAreaView style = {style.main} >
@@ -48,14 +49,14 @@ function Food_page(props: any)
 
 
 
-                            <View style = {style.container} >
+                            <View style = {style.container} ref={food_container}>
 
                                         {
                                         FOODS.map(({id, nev, price, image}) =>{
 
-
                                                 if (new RegExp(filter).test(nev))
                                                 {
+                                                    
                                                     return (<Food key = {id} stlye = {style.food} image ={require("../../assets/icon.png")} name = {nev} price = {`${price} Ft`} delete = {false} button_function = {() => {
                                                         const bucket_1 = bucket ?? []
 
@@ -107,7 +108,7 @@ function Food_page(props: any)
                 }
 
                 <View style = {style.overlay}>
-                    <Overlay activateHistory = {() => setHistory(true)} activateProfile = {() => setProfile(true)} activateSearch = {() => setSearch(!searching)}/>
+                    <Overlay  activateHistory = {() => setHistory(true)} activateProfile = {() => setProfile(true)} activateSearch = {() => setSearch(!searching)}/>
                 </View>
 
                 {profile && <Profile style = {{ backgroundColor: "#000" }} omid = {om_id} setButton = {() => setProfile(false)}/>}

@@ -1,37 +1,78 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView, Alert, TouchableHighlight, TouchableOpacity, TouchableWithoutFeedback} from 'react-native';
 import Food, { FoodInterface } from './food';
-import React from 'react';
+import HistoryFood from './history_food';
+import React, { useState } from 'react';
 
+const calculate_final = (bucket: FoodInterface[]) => 
+{
+    let current = 0;
 
+    for (const elem of bucket)
+    {
+        current += parseInt(elem.price) 
+    }
+
+    return current
+}
 
 export default function Paying(props: any)
 {
-    let bucket: object[] = props.bucket
 
+    const [bucket, setBucket] = useState<FoodInterface[]>(props.bucket)
 
+    const full_price = calculate_final(bucket)
 
 
     return (
         <View style = {style.container}>
             <Text style = {style.title}>KOSÁR</Text>
 
+        
+
+            
             <View style = {style.list}>
                 {
-                    bucket.map((value, index) => 
-                    {
-                        const {nev, price} = (value as FoodInterface)
+                    bucket.length !== 0 
+                     ? (
+                        <>
                         
-                        return <Food key = {index} image ={require("../../assets/icon.png")} nev = {nev} price = {`${price} Ft`} delete = {true} button_function = {()=>
-                        {
+                            {bucket.map((value, index) => {
                             
-                            bucket.slice(index, 1);
-                            props.updateBucket(bucket)
+                            const {nev, price} = (value as FoodInterface)
                             
-                        }}/>
-                    })
+                            return <HistoryFood key = {index} style = {style.item} image ={require("../../assets/icon.png")} name = {nev} price = {`${price} Ft`} button_function = {()=>
+                            {
+                                let temp = [...bucket]
+                                temp.splice(index, 1)
+                                
+                                
+                                
+                                props.updateBucket(temp)
+
+                                setBucket(temp)
+
+                                
+                            }} />
+                            
+                            }
+                        
+                        )
+                        }
+                        <View style={{ marginTop:10, borderRadius: 8, borderColor:"#8a2f39", borderWidth:8, borderBottomWidth: StyleSheet.hairlineWidth}}></View>
+                        <View style = {{width:"100%", backgroundColor:"white"}}>
+                            <Text style = {{...style.price, position:'absolute',top:"10%",left:"50%"}}>{`${full_price} Ft`}</Text>
+                            <Text style = {{...style.price, position:'absolute',top:"10%",left:"0%"}}>{"Összesen:"}</Text>
+                        </View>
+                        </>)
+                     : (<>
+                            <Text style = {style.empty_bucket}>{"ÜRES A KOSARAD"}</Text>
+                            
+                            <Text style = {{...style.empty_bucket, marginRight:"50%", transform: [{rotate:'265deg'}]}}>{"):"}</Text>
+                      </>)
                 }
             </View>
+            
 
 
             <TouchableOpacity style = {style.paywithcash}>
@@ -65,7 +106,7 @@ const style = StyleSheet.create(
         },
         title:{
             position:'absolute',
-            top:"5%",
+            top:"2%",
             alignSelf:'center',
             fontSize:60,
             fontFamily:'Caveat',
@@ -76,24 +117,60 @@ const style = StyleSheet.create(
             textShadowRadius: 20
         },
         list:{
-
+            
+            width:'90%',
+            height:"30%",
+            alignSelf:'center',
+            position:'absolute',
+            top:"15%"
+        },
+        scrView:{
+            height:"100%"
+        },
+        item:
+        {
+            marginBottom:10,
+            width:"30%",
+            
         },
         back:{
             position:'absolute',
             alignSelf:'center',
-            bottom:"5%"
+            bottom:"1%"
         },
         paywithcash:
         {
             position:'absolute',
             alignSelf:'center',
-            bottom:"26%"
+            bottom:"21%"
         },
         paywithcard:
         {
             position:'absolute',
             alignSelf:'center',
-            bottom:"15%"
+            bottom:"10%"
+        },
+        empty_bucket:
+        {
+            position:'absolute',
+            alignSelf:'center',
+            
+            top:"30%",
+            
+            fontSize:40,
+            fontFamily:'Caveat',
+            color:"#E17676",
+            fontStyle:'italic',
+            textShadowColor: 'rgba(225, 118, 118, 0.7)',
+            textShadowOffset: {width: 1, height: -1},
+            textShadowRadius: 20
+        },
+        price:
+        {
+            color:"#E17676",
+            fontFamily:"JetBrains-Mono",
+
+            fontSize:20,
         }
     }
 )

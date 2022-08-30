@@ -59,12 +59,14 @@ function Food_page(props: any)
                                                     return (<Food key = {id} stlye = {style.food} image ={require("../../assets/icon.png")} name = {nev} price = {`${price} Ft`} delete = {false} button_function = {() => {
                                                         const bucket_1 = bucket ?? []
 
-                                                        if (bucket_1.length >= 5)
+                                                        if (bucket_1.length >= 4)
                                                         {
-                                                            Alert.alert("HIBA", "Legfeljebb 5 dolgot rendelhetsz egyszerre")
+                                                            Alert.alert("HIBA", "Legfeljebb 4 dolgot rendelhetsz egyszerre")
                                                             return;
                                                         }
-                                                        setBucket([...bucket_1 , {id, nev, price, image}])}
+
+                                                        const buy_id = bucket_1.length
+                                                        setBucket([...bucket_1 , {id, nev, price, image, buy_id}])}
                                                     }/>)
                                                 }
 
@@ -92,7 +94,7 @@ function Food_page(props: any)
 
 
                     <SearchEngine updateSearch = {(text:string) => setFilter(text)} />
-                    <View style = {style.searchengine_overlay}></View>
+                    <View style = {style.searchengine_overlay}/>
                 </View>}
 
 

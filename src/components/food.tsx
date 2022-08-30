@@ -12,6 +12,8 @@ export interface FoodInterface{
     nev: string
     price: string //lehetne int is 
     id: number
+
+    buy_id: number
     callback?: () => void
 }
 
@@ -46,7 +48,7 @@ function Food(props: any): JSX.Element{  //props-nak nem lehet Interface-t megad
 
 
                 </View>
-                <Pressable onPress={props.button_function}><View><Image style = {style.tocart} source ={ delete_ ? require("../../assets/trash.png") : require("../../assets/to-cart.png")}/></View></Pressable>
+                <Pressable onPress={props.button_function}><View><Image style = {style.tocart} source ={ require("../../assets/to-cart.png")}/></View></Pressable>
             </View>)
 }
 
@@ -54,7 +56,7 @@ const style = StyleSheet.create(
     {
         container: {
 
-            height:125,
+            height:"100%",
             marginTop:"5%",
             marginRight: "5%",
             marginBottom: 0,
@@ -81,6 +83,7 @@ const style = StyleSheet.create(
             marginLeft:"8%",
             height:"85%",
             width:110,
+            borderRadius:10
 
         },
         text_container:
@@ -91,7 +94,8 @@ const style = StyleSheet.create(
         price: {
           
           textAlign:'center',
-          marginTop: 10,
+          marginTop: "5%",
+          alignSelf:"center",
           
           color: "#E17676",
           fontSize:36,
@@ -103,6 +107,7 @@ const style = StyleSheet.create(
         
            color: "#EFEFEF",
            fontSize:21,
+           alignSelf:"center",
            textAlign:'center',
            marginBottom: 20
             

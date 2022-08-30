@@ -7,7 +7,7 @@
     },
     {
         "id":2,
-        "nev":"Sonkás Sajtos \nMelegszendvics",
+        "nev":"Sonkás Sajtos\nMelegszendvics",
         "price":400,
         "image":"asd"
     },
@@ -22,5 +22,32 @@
         "nev":"Bacon-os \nMelegszendvics",
         "price":400,
         "image":"asd"
+    },
+    {
+        "id":5,
+        "nev":"Coca Kóla",
+        "price": 200,
+        "image": "asd"
+    },
+    {
+        "id":6,
+        "nev":"Fanta",
+        "price": 200,
+        "image": "asd"
+    },
+    {
+
+        "id":7,
+        "nev":"Fanta mentes",
+        "price": 200,
+        "image": "asd"
+    
+    },{
+
+        "id":8,
+        "nev":"Fanta Draga",
+        "price": 200,
+        "image": "asd"
+    
     }
 ]

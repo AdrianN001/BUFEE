@@ -21,7 +21,6 @@ export interface FoodInterface{
 function Food(props: any): JSX.Element{  //props-nak nem lehet Interface-t megadni, mivel a babel nem kedvelne i guess
     const {image, name, price, id, callback} = props
     
-    const delete_ = props.delete
 
 
     const [loaded] = useFonts({

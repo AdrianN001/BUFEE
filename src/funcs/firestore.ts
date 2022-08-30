@@ -76,4 +76,4 @@ async function get_data(om_id: string): Promise< User_Model >{
 
 
 
-export {add_User, REGISTER_RESPONSE, get_password, get_data}
+export {add_User, REGISTER_RESPONSE, get_password, get_data, User_Model}

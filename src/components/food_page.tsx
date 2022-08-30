@@ -10,6 +10,7 @@ import Profile from './profile';
 import React from 'react';
 import History from './history';
 import Paying from './paying';
+import { get_data } from '../funcs/firestore';
 
 const FOODS: FoodInterface[] = Array.from(require("../../assets/FOODS.json"))
 
@@ -75,16 +76,6 @@ function Food_page(props: any)
 
                                                 })
                                     }
-{/*
-                                    <Food style = {style.food} image = {require("../../assets/icon.png")} />
-                                    <Food style = {style.food} image = {require("../../assets/icon.png")} />
-                                    <Food style = {style.food} image = {require("../../assets/icon.png")} name = "Sajtos  Csiga" price = "5000 Ft"/>
-                                    <Food style = {style.food} image = {require("../../assets/icon.png")} />
-                                    <Food style = {style.food} image = {require("../../assets/icon.png")} />
-                                    <Food style = {style.food} image = {require("../../assets/icon.png")} />
-                                    <Food style = {style.food} image = {require("../../assets/icon.png")} /> */}
-
-
 
 
                             </View>
@@ -99,12 +90,13 @@ function Food_page(props: any)
                 </View>}
 
 
-                {bucket && bucket?.length >= 1 &&
-                    <View style = {style.cartbutton} >
-                        <TouchableOpacity onPress={() => setPaying(true)}>
-                            <CartButton count = {bucket?.length}/>
-                        </TouchableOpacity>
-                    </View>
+                {
+                    bucket && bucket?.length >= 1 &&
+                        <View style = {style.cartbutton} >
+                            <TouchableOpacity onPress={() => setPaying(true)}>
+                                <CartButton count = {bucket?.length}/>
+                            </TouchableOpacity>
+                        </View>
                 }
 
                 <View style = {style.overlay}>
@@ -113,7 +105,7 @@ function Food_page(props: any)
 
                 {profile && <Profile style = {{ backgroundColor: "#000" }} omid = {om_id} setButton = {() => setProfile(false)}/>}
                 {history && <History style = {{ backgroundColor: "#000" }} omid = {om_id} setButton = {() => setHistory(false)}/>}
-                {paying && <Paying updateBucket = {(bucket: FoodInterface[]) => setBucket(bucket)} bucket = {bucket} back_button = {() => setPaying(false)}/>}
+                {paying && <Paying omid = {om_id} updateBucket = {(bucket: FoodInterface[]) => setBucket(bucket)} bucket = {bucket} back_button = {() => setPaying(false)}/>}
 
 
 

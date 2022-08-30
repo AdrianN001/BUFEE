@@ -2,7 +2,9 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView, Alert, TouchableHighlight, TouchableOpacity, TouchableWithoutFeedback} from 'react-native';
 import Food, { FoodInterface } from './food';
 import HistoryFood from './history_food';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import addOrder from '../funcs/order';
+import { User_Model } from '../funcs/firestore';
 
 const calculate_final = (bucket: FoodInterface[]) => 
 {
@@ -20,6 +22,9 @@ export default function Paying(props: any)
 {
 
     const [bucket, setBucket] = useState<FoodInterface[]>(props.bucket)
+    const [omid, setOMID] = useState<string>(props.omid);
+
+   
 
     const full_price = calculate_final(bucket)
 
@@ -75,10 +80,10 @@ export default function Paying(props: any)
             
 
 
-            <TouchableOpacity style = {style.paywithcash}>
+            <TouchableOpacity style = {style.paywithcash} onPress = {() => addOrder(omid, bucket)}>
                 <Image source={require("../../assets/paywithcash.png")}/>
             </TouchableOpacity>
-            <TouchableOpacity style = {style.paywithcard}>
+            <TouchableOpacity style = {style.paywithcard} onPress = {() => addOrder(omid, bucket)}>
                 <Image source={require("../../assets/paywithcard.png")}/>
             </TouchableOpacity>
             <TouchableOpacity onPress={props.back_button} style = {style.back}>

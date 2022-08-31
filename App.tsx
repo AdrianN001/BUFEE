@@ -1,6 +1,8 @@
 import Login from './src/components/Login';
 import Food_page from './src/components/food_page';
 import Profile from './src/components/profile';
+import Clerk from './src/components/clerk_page';
+
 
 import React, { useRef, useState } from 'react';
 
@@ -26,7 +28,9 @@ export default function App() {
           setLogedIn(can_login);
           setglobalOMID(om_id)
         }}/>
-              : <Food_page om_id = {globalOMID}/>
+              : globalOMID !== "pagisz_admin_bufee"
+              ? <Food_page om_id = {globalOMID}/>  
+              : <Clerk/>
   
   
 )

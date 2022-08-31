@@ -105,7 +105,7 @@ const style = StyleSheet.create(
         name:{
         
            color: "#EFEFEF",
-           fontSize:21,
+           fontSize:20,
            alignSelf:"center",
            textAlign:'center',
            marginBottom: 20

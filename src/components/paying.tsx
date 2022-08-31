@@ -162,7 +162,7 @@ const style = StyleSheet.create(
             
             top:"30%",
             
-            fontSize:40,
+            fontSize:35,
             fontFamily:'Caveat',
             color:"#E17676",
             fontStyle:'italic',

@@ -79,7 +79,7 @@ const style = StyleSheet.create(
             color:"#E17676",
             fontFamily:"JetBrains-Mono",
 
-            fontSize:30,
+            fontSize:25,
 
 
            
@@ -99,7 +99,7 @@ const style = StyleSheet.create(
             color:"#000",
             
             fontWeight:'600',
-            fontSize:16,
+            fontSize:13,
             
         },
         nameView:

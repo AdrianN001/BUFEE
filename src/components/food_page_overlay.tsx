@@ -46,15 +46,22 @@ function Overlay(props: any)
 
     return (
         <View>
-            <TouchableOpacity onPress={props.activateHistory}><Image source = {require("../../assets/history_button.png")} style = {style.history}></Image></TouchableOpacity>
-            <TouchableOpacity onPress={props.activateSearch}>
-                <Text style = {style.text} >
+            <TouchableHighlight onPressIn={props.activateHistory}>
+                <Image source = {require("../../assets/history_button.png")} style = {style.history}/>
+            </TouchableHighlight>
+            <TouchableHighlight onPressIn={props.activateSearch}>
+                <Text style = {{...style.text, backgroundColor:"rgba(0,0,0,0)"}} >
                     BUFEE
                     
-                </Text>
-            </TouchableOpacity>
+               </Text>
+            </TouchableHighlight>
             
-            <TouchableOpacity onPress={props.activateProfile}><Image source = {require("../../assets/profile_button.png")} style = {style.profile}></Image></TouchableOpacity>
+            <TouchableHighlight onPressIn={props.activateProfile}>
+                
+                    <Image source = {require("../../assets/profile_button.png")} style = {style.profile}/>
+
+                
+            </TouchableHighlight>
         </View>
     )
 }

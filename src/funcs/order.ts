@@ -1,4 +1,5 @@
 import firestore from "@react-native-firebase/firestore";
+import { Alert } from "react-native";
 import { FoodInterface } from "../components/food";
 import {User_Model} from "./firestore"
 
@@ -23,15 +24,19 @@ export default async function addOrder(om_id: string, bucket: FoodInterface[]) :
     
     const data_payload = generate_payload(om_id,bucket)
 
-    const last_item = await firestore().collection("queue").orderBy("order_id", "asc").limit(1).get()
+    const last_item = await firestore().collection("queue").orderBy("order_id", "desc").limit(1).get()
 
     const last_index: number = parseInt(last_item.docs[0].data()['order_id'])
+    
+    const current_index = last_index + 1
 
     firestore().collection("queue").add(
         {
             payload : data_payload,
-            order_id : last_index + 1       
+            order_id : current_index       
         }
     )
+
+    //Alert.alert(`Elozo ${last_index}`, `Mostani ${current_index}`)
 }
 

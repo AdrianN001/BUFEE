@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView, Alert, TouchableHighlight, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView, Alert, TouchableHighlight, TouchableOpacity, LayoutChangeEvent} from 'react-native';
 import { useState, Children, useRef, useEffect } from 'react';
 import { useFonts } from 'expo-font';
 import Food, {FoodInterface} from './food';
@@ -18,9 +18,23 @@ const FOODS: FoodInterface[] = Array.from(require("../../assets/FOODS.json"))
 function Food_page(props: any)
 {
     const [positon, setPosition] = useState(0);
-    const [height, setHeight] = useState(0);
+    const [viewHeight, setViewHeight] = useState(0);
+    const [food_height, setFoodHeight] = useState<number>(0);
 
-    const food_container = useRef(null);
+   // const [food_titles, setFoodTitle] = useState<number>(0)
+
+    const overlay_ref = useRef();
+
+    const food_count = useRef<number>(0);
+
+    const food_size = useRef<number>(120);
+
+    const transform_formula = (food_size.current * food_count.current) 
+
+
+    
+
+   
 
 
     const [bucket, setBucket] = useState<FoodInterface[]>();
@@ -46,30 +60,38 @@ function Food_page(props: any)
 
 
 
-                <ScrollView  onScroll = {e => setPosition(e.nativeEvent.contentOffset.y)} >
+                <ScrollView  
+                   
+                >
 
 
 
-                            <View style = {style.container} ref={food_container}>
+                            <View style = {style.container} >
 
                                         {
                                         FOODS.map(({id, nev, price, image}) =>{
 
                                                 if (new RegExp(filter).test(nev))
-                                                {
+                                                {  
+                                                    food_count.current++
                                                     
-                                                    return (<Food key = {id} stlye = {style.food} image ={require("../../assets/icon.png")} name = {nev} price = {`${price} Ft`} delete = {false} button_function = {() => {
-                                                        const bucket_1 = bucket ?? []
+                                                    return (<Food key = {id}
+                                                       
+                                                        image ={require("../../assets/icon.png")} 
+                                                        name = {nev} 
+                                                        price = {`${price} Ft`} 
+                                                        button_function = {() => {
+                                                            const bucket_1 = bucket ?? []
 
-                                                        if (bucket_1.length >= 4)
-                                                        {
-                                                            Alert.alert("HIBA", "Legfeljebb 4 dolgot rendelhetsz egyszerre")
-                                                            return;
-                                                        }
+                                                            if (bucket_1.length >= 4)
+                                                            {
+                                                                Alert.alert("HIBA", "Legfeljebb 4 dolgot rendelhetsz egyszerre")
+                                                                return;
+                                                            }
 
-                                                        const buy_id = bucket_1.length
-                                                        setBucket([...bucket_1 , {id, nev, price, image, buy_id}])}
-                                                    }/>)
+                                                            const buy_id = bucket_1.length
+                                                            setBucket([...bucket_1 , {id, nev, price, image, buy_id}])}
+                                                    }  />)
                                                 }
 
 
@@ -85,7 +107,7 @@ function Food_page(props: any)
                 {searching && <View style = {style.searchengine}>
 
 
-                    <SearchEngine updateSearch = {(text:string) => setFilter(text)} />
+                    <SearchEngine updateSearch = {(text: string) => setFilter(text)} />
                     <View style = {style.searchengine_overlay}/>
                 </View>}
 
@@ -99,8 +121,13 @@ function Food_page(props: any)
                         </View>
                 }
 
-                <View style = {style.overlay}>
-                    <Overlay  activateHistory = {() => setHistory(true)} activateProfile = {() => setProfile(true)} activateSearch = {() => setSearch(!searching)}/>
+                <View style = {{...style.overlay}}  >
+                    <Overlay  
+                        activateHistory = {() => setHistory(true)} 
+                        activateProfile = {() => setProfile(true)} 
+                        activateSearch = {() => setSearch(!searching)}
+
+                    />
                 </View>
 
                 {profile && <Profile style = {{ backgroundColor: "#000" }} omid = {om_id} setButton = {() => setProfile(false)}/>}

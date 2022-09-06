@@ -35,7 +35,7 @@ function Food(props: any): JSX.Element{  //props-nak nem lehet Interface-t megad
           
     }
 
-    return (<View style = {style.container}>
+    return (<View style = {style.container} onLayout = {(evt:any) => {props.getHeight(evt.nativeEvent.layout.height)}}>
                 <View style = {{width:90}}><Image source = {image ?? require("../../assets/icon.png")} style = {style.image} /></View>
                 
                 <View style = {style.text_container}>
@@ -55,7 +55,8 @@ function Food(props: any): JSX.Element{  //props-nak nem lehet Interface-t megad
 const style = StyleSheet.create(
     {
         container: {
-
+            
+            
             height:"100%",
             marginTop:"5%",
             marginRight: "5%",

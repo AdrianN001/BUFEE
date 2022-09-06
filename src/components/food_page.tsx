@@ -17,22 +17,20 @@ const FOODS: FoodInterface[] = Array.from(require("../../assets/FOODS.json"))
 
 function Food_page(props: any)
 {
-    const [positon, setPosition] = useState(0);
-    const [viewHeight, setViewHeight] = useState(0);
     const [food_height, setFoodHeight] = useState<number>(0);
 
    // const [food_titles, setFoodTitle] = useState<number>(0)
 
     const overlay_ref = useRef();
 
+    const position = useRef<number>(0);
+
     const food_count = useRef<number>(0);
 
-    const food_size = useRef<number>(120);
 
-    const transform_formula = (food_size.current * food_count.current) 
+    console.log(`food_height = ${food_height}`)
 
-
-    
+    const BLUR_TRESHOLD: number = .8;
 
    
 
@@ -61,24 +59,40 @@ function Food_page(props: any)
 
 
                 <ScrollView  
-                   
+                    onScroll = {e => {
+                        position.current = e.nativeEvent.contentOffset.y
+                        
+                        console.log(position.current * 2 )
+                        
+
+                        if (position.current * 2 > (food_count.current * food_height)*.8)
+                        {
+                            console.log("torolheto")
+                            Alert.alert("JELZES", "IDK")
+                        }
+                       
+
+                        }} 
                 >
 
 
 
-                            <View style = {style.container} >
+                            <View style = {style.container} onLayout = {(evt:any) => console.log(evt.nativeEvent.layout)}>
 
                                         {
                                         FOODS.map(({id, nev, price, image}) =>{
+                                            food_count.current = FOODS.filter(etel => new RegExp(filter).test(etel.nev)).length
+                                            
 
                                                 if (new RegExp(filter).test(nev))
                                                 {  
-                                                    food_count.current++
                                                     
                                                     return (<Food key = {id}
                                                        
                                                         image ={require("../../assets/icon.png")} 
                                                         name = {nev} 
+                                                        style = {{height: 130}}
+                                                        getHeight = {(magassag: number) => setFoodHeight(!magassag ? Math.min(magassag, food_height): magassag)}
                                                         price = {`${price} Ft`} 
                                                         button_function = {() => {
                                                             const bucket_1 = bucket ?? []
@@ -127,6 +141,7 @@ function Food_page(props: any)
                         activateProfile = {() => setProfile(true)} 
                         activateSearch = {() => setSearch(!searching)}
 
+                        ref = {overlay_ref}
                     />
                 </View>
 

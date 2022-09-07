@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView, Alert, TouchableHighlight, TouchableOpacity, LayoutChangeEvent} from 'react-native';
-import { useState, Children, useRef, useEffect } from 'react';
+import { useState, Children, useRef, useEffect, createRef } from 'react';
 import { useFonts } from 'expo-font';
 import Food, {FoodInterface} from './food';
 import Overlay from './food_page_overlay';
@@ -18,21 +18,18 @@ const FOODS: FoodInterface[] = Array.from(require("../../assets/FOODS.json"))
 function Food_page(props: any)
 {
     const [food_height, setFoodHeight] = useState<number>(0);
+    
+    const [offset, setOffset] = useState<number>(0);
+    const [opacity_1, setOpacity] = useState<number>(1);
 
-   // const [food_titles, setFoodTitle] = useState<number>(0)
+    //let overlay_ref = useRef<any>();
 
-    const overlay_ref = useRef();
-
-    const position = useRef<number>(0);
+    const [position, setPositon] = useState<number>(0);
 
     const food_count = useRef<number>(0);
 
-
-    console.log(`food_height = ${food_height}`)
-
     const BLUR_TRESHOLD: number = .8;
 
-   
 
 
     const [bucket, setBucket] = useState<FoodInterface[]>();
@@ -48,7 +45,30 @@ function Food_page(props: any)
 
     const om_id: string = props.om_id;
 
-    
+    useEffect(() => {
+
+                        
+
+        if (position * 2 > (food_count.current * food_height) * BLUR_TRESHOLD &&  food_count.current > 5) 
+        {
+            const useful_position = position * 2
+            
+
+            const max_offset =  (food_count.current * food_height) * .2 / 1.59
+            
+            const actual_Offset: number = useful_position - (food_count.current * food_height) * BLUR_TRESHOLD
+
+            //const actual_Opacity: number = parseInt((actual_Offset / max_offset).toFixed(2))
+
+            setOffset(Math.round(actual_Offset))
+            //setOpacity(actual_Opacity)
+
+        }else {
+            //setOpacity(1)
+            setOffset(0)
+        }
+
+    },[position])
 
     return(
         < SafeAreaView style = {style.main} >
@@ -59,21 +79,7 @@ function Food_page(props: any)
 
 
                 <ScrollView  
-                    onScroll = {e => {
-                        position.current = e.nativeEvent.contentOffset.y
-                        
-                        console.log(position.current * 2 )
-                        
-
-                        if (position.current * 2 > (food_count.current * food_height)*.8)
-                        {
-                            console.log("torolheto")
-                            Alert.alert("JELZES", "IDK")
-                        }
-                       
-
-                        }} 
-                >
+                    onScroll = {e => {setPositon( e.nativeEvent.contentOffset.y )}}  >
 
 
 
@@ -135,17 +141,18 @@ function Food_page(props: any)
                         </View>
                 }
 
-                <View style = {{...style.overlay}}  >
+                <View style = {{...style.overlay,transform: [{translateY: offset}]}}  >
                     <Overlay  
                         activateHistory = {() => setHistory(true)} 
                         activateProfile = {() => setProfile(true)} 
                         activateSearch = {() => setSearch(!searching)}
 
-                        ref = {overlay_ref}
+                        //style = {{backgroundColor: `rgba(0,0,0,${opacity_1})`}}
+
                     />
                 </View>
 
-                {profile && <Profile style = {{ backgroundColor: "#000" }} omid = {om_id} setButton = {() => setProfile(false)}/>}
+                {profile && <Profile style = {{ backgroundColor: "#000" }} omid = {om_id} setLogout = {() => props.setLogout(false)} setButton = {() => setProfile(false)}/>}
                 {history && <History style = {{ backgroundColor: "#000" }} omid = {om_id} setButton = {() => setHistory(false)}/>}
                 {paying && <Paying omid = {om_id} updateBucket = {(bucket: FoodInterface[]) => setBucket(bucket)} bucket = {bucket} back_button = {() => setPaying(false)}/>}
 

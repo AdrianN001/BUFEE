@@ -40,6 +40,7 @@ export default function Profile(props:any)
             <Text style = {{...style.data, position:'absolute', top:"65%",alignSelf:'center'}}>{data?.class_ ?? "..."}</Text>
 
             <TouchableOpacity onPress={props.setButton} style = {style.back}><Image source={ require("../../assets/back_button.png")}/></TouchableOpacity>
+            <TouchableOpacity onPress={props.setLogout} style = {style.logout}><Image source={ require("../../assets/logout_button.png")}/></TouchableOpacity>
         </View>
     )
 
@@ -74,6 +75,12 @@ const style = StyleSheet.create(
         back: {
             position:'absolute',
             bottom:"8%",
+            alignSelf:'center'
+        },
+        logout:
+        {
+            position:'absolute',
+            bottom:'-1%',
             alignSelf:'center'
         },
         data:

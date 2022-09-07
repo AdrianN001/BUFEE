@@ -29,8 +29,8 @@ export default function App() {
           setglobalOMID(om_id)
         }}/>
               : globalOMID !== "pagisz_admin_bufee"
-              ? <Food_page om_id = {globalOMID}/>  
-              : <Clerk/>
+                ? <Food_page om_id = {globalOMID} setLogout ={(elem: boolean) => setLogedIn(elem)}/>  
+                : <Clerk/>
   
   
 )

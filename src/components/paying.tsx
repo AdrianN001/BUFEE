@@ -80,10 +80,10 @@ export default function Paying(props: any)
             
 
 
-            <TouchableOpacity style = {style.paywithcash} onPress = {() => addOrder(omid, bucket)}>
+            <TouchableOpacity style = {style.paywithcash} onPress = {() => addOrder(omid, bucket, false)}>
                 <Image source={require("../../assets/paywithcash.png")}/>
             </TouchableOpacity>
-            <TouchableOpacity style = {style.paywithcard} onPress = {() => addOrder(omid, bucket)}>
+            <TouchableOpacity style = {style.paywithcard} onPress = {() => addOrder(omid, bucket, true)}>
                 <Image source={require("../../assets/paywithcard.png")}/>
             </TouchableOpacity>
             <TouchableOpacity onPress={props.back_button} style = {style.back}>

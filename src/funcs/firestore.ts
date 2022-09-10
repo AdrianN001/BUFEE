@@ -25,12 +25,23 @@ interface User_Model{
     
     previus_order: string[]
 }
+interface Order_Model{
+    _id?: any
+
+    name: string,
+    _class: string,
+
+    payload: string[],
+    isPayed: boolean,
+
+    price: number
+}
 
 
 
 async function add_User(om_id: string,password: string,name: string,class_: string): Promise< REGISTER_RESPONSE >{
 
-    const OMID_Regex: RegExp = /^72555(.{6})$/; 
+    const OMID_Regex: RegExp = /^72(.{9})$/; 
     const CLASS_REGEX: RegExp = /^(9|(10)|(11)|(12)|(13))( |\.|\. |)([A-Ea-e])$/
 
     if(!OMID_Regex.test(om_id))
@@ -76,4 +87,4 @@ async function get_data(om_id: string): Promise< User_Model >{
 
 
 
-export {add_User, REGISTER_RESPONSE, get_password, get_data, User_Model}
+export {Order_Model, add_User, REGISTER_RESPONSE, get_password, get_data, User_Model}

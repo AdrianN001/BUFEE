@@ -93,25 +93,41 @@ function Food_page(props: any)
                                                 if (new RegExp(filter).test(nev))
                                                 {  
                                                     
-                                                    return (<Food key = {id}
-                                                       
-                                                        image ={require("../../assets/icon.png")} 
-                                                        name = {nev} 
-                                                        style = {{height: 130}}
-                                                        getHeight = {(magassag: number) => setFoodHeight(!magassag ? Math.min(magassag, food_height): magassag)}
-                                                        price = {`${price} Ft`} 
-                                                        button_function = {() => {
-                                                            const bucket_1 = bucket ?? []
+                                                    return (<TouchableOpacity
+                                                            onLongPress={
+                                                                () => {
+                                                                    const bucket_1 = bucket ?? []
 
-                                                            if (bucket_1.length >= 4)
-                                                            {
-                                                                Alert.alert("HIBA", "Legfeljebb 4 dolgot rendelhetsz egyszerre")
-                                                                return;
+                                                                    if (bucket_1.length >= 4)
+                                                                    {
+                                                                        Alert.alert("HIBA", "Legfeljebb 4 dolgot rendelhetsz egyszerre")
+                                                                        return;
+                                                                    }
+
+                                                                    const buy_id = bucket_1.length
+                                                                    setBucket([...bucket_1 , {id, nev, price, image, buy_id}])}
                                                             }
+                                                            style = {{height: 150}}>
+                                                                    <Food key = {id}
+                                                                
+                                                                    image ={require("../../assets/icon.png")} 
+                                                                    name = {nev} 
+                                                                    
+                                                                    getHeight = {(magassag: number) => setFoodHeight(!magassag ? Math.min(magassag, food_height): magassag)}
+                                                                    price = {`${price} Ft`} 
+                                                                    button_function = {() => {
+                                                                        const bucket_1 = bucket ?? []
 
-                                                            const buy_id = bucket_1.length
-                                                            setBucket([...bucket_1 , {id, nev, price, image, buy_id}])}
-                                                    }  />)
+                                                                        if (bucket_1.length >= 4)
+                                                                        {
+                                                                            Alert.alert("HIBA", "Legfeljebb 4 dolgot rendelhetsz egyszerre")
+                                                                            return;
+                                                                        }
+
+                                                                        const buy_id = bucket_1.length
+                                                                        setBucket([...bucket_1 , {id, nev, price, image, buy_id}])}
+                                                                }  />
+                                                    </TouchableOpacity>)
                                                 }
 
 
@@ -141,16 +157,18 @@ function Food_page(props: any)
                         </View>
                 }
 
-                <View style = {{...style.overlay,transform: [{translateY: offset}]}}  >
-                    <Overlay  
-                        activateHistory = {() => setHistory(true)} 
-                        activateProfile = {() => setProfile(true)} 
-                        activateSearch = {() => setSearch(!searching)}
+                {
+                    offset < 110 && <View style = {{...style.overlay,transform: [{translateY: offset}]}}  >
+                        <Overlay  
+                            activateHistory = {() => setHistory(true)} 
+                            activateProfile = {() => setProfile(true)} 
+                            activateSearch = {() => setSearch(!searching)}
 
-                        //style = {{backgroundColor: `rgba(0,0,0,${opacity_1})`}}
+                            //style = {{backgroundColor: `rgba(0,0,0,${opacity_1})`}}
 
-                    />
-                </View>
+                        />
+                    </View>
+                }
 
                 {profile && <Profile style = {{ backgroundColor: "#000" }} omid = {om_id} setLogout = {() => props.setLogout(false)} setButton = {() => setProfile(false)}/>}
                 {history && <History style = {{ backgroundColor: "#000" }} omid = {om_id} setButton = {() => setHistory(false)}/>}

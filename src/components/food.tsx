@@ -48,7 +48,7 @@ function Food(props: any): JSX.Element{  //props-nak nem lehet Interface-t megad
 
 
                 </View>
-                <Pressable onPress={props.button_function}><View><Image style = {style.tocart} source ={ require("../../assets/to-cart.png")}/></View></Pressable>
+                <Pressable  onPress={props.button_function}><View><Image style = {style.tocart} source ={ require("../../assets/to-cart.png")}/></View></Pressable>
             </View>)
 }
 
@@ -95,7 +95,8 @@ const style = StyleSheet.create(
         price: {
           
           textAlign:'center',
-          marginTop: "5%",
+          position:'absolute',
+          bottom:"2%",
           alignSelf:"center",
           
           color: "#E17676",

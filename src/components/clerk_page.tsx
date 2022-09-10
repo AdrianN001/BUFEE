@@ -1,11 +1,14 @@
 import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView, Animated, TouchableHighlight, TouchableOpacity} from 'react-native';
 import { useFonts } from '@expo-google-fonts/dev';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import ClerkOrder from './clerk_order';
 import { StatusBar } from 'expo-status-bar';
 
 
 export default function Clerk(props: any)
 {
+    const [order_open, setOpen] = useState<boolean>(false);
+
     useFonts(
         {
           'Glory': require("../../assets/fonts/Glory.ttf")
@@ -18,7 +21,7 @@ export default function Clerk(props: any)
             <Text style = {style.text}>BUFEE</Text>
 
             <View  style = {style.order} >
-                <TouchableOpacity><Image source = {require("../../assets/rendeles_clerk.png")}/></TouchableOpacity>
+                <TouchableOpacity onPress={()=>{setOpen(true)}}><Image source = {require("../../assets/rendeles_clerk.png")}/></TouchableOpacity>
             </View>
             
 
@@ -26,6 +29,7 @@ export default function Clerk(props: any)
                 <TouchableOpacity><Image source = {require("../../assets/message_clerk.png")} /></TouchableOpacity>
             </View>
             
+            {order_open && <ClerkOrder/>}
 
             <StatusBar style='auto'/>
         </View>

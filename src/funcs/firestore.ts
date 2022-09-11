@@ -23,7 +23,7 @@ interface User_Model{
     password:string,
     class_: string,
     
-    previus_order: string[]
+    
 }
 interface Order_Model{
     _id?: any
@@ -34,7 +34,10 @@ interface Order_Model{
     payload: string[],
     isPayed: boolean,
 
-    price: number
+    price: number, 
+    isDone: boolean, 
+
+    timeCreated: string
 }
 
 
@@ -48,7 +51,7 @@ async function add_User(om_id: string,password: string,name: string,class_: stri
     {
         return REGISTER_RESPONSE.INVALID_OMID
     }
-    else if  (await (await firestore().collection("users").where("om_id", "==", om_id).get()).docs.length !== 0)
+    else if(await (await firestore().collection("users").where("om_id", "==", om_id).get()).docs.length !== 0)
     {
         return REGISTER_RESPONSE.ALREADY_REGISTERED;
     }
@@ -58,7 +61,7 @@ async function add_User(om_id: string,password: string,name: string,class_: stri
     }
     else{
         
-        firestore().collection("users").add({om_id, password,name,class_, previus_order: []}).then(() => console.log('User Added'))
+        firestore().collection("users").add({om_id, password,name,class_}).then(() => console.log('User Added'))
         return REGISTER_RESPONSE.OK;
 
     }

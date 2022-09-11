@@ -6,7 +6,7 @@ import { get_data } from "../funcs/firestore";
 
 
 
-export default function History(props:any)
+export default function ClientOrders(props:any)
 {
     const OMID:string = props.omid.toString()
 
@@ -34,9 +34,9 @@ export default function History(props:any)
 
     return (
         <View style = {style.container}>
-             <Text style = {style.title}>Előzmény</Text>
+             <Text style = {style.title}>RENDELÉSEK</Text>
                 
-                <Text style = {{alignSelf: "center", position:'absolute',top:"50%", fontSize:20,color:"red"}}>%HISTORY%</Text>
+                <Text style = {{alignSelf: "center", position:'absolute',top:"50%", fontSize:20,color:"red"}}>%YOUR ORDERS%</Text>
 
              <TouchableOpacity onPress={props.setButton} style = {style.back}><Image source={ require("../../assets/back_button.png")}/></TouchableOpacity>
         </View>

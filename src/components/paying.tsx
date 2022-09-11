@@ -5,6 +5,8 @@ import HistoryFood from './history_food';
 import React, { useEffect, useState } from 'react';
 import addOrder from '../funcs/order';
 import { User_Model } from '../funcs/firestore';
+import firestore, { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
+
 
 const calculate_final = (bucket: FoodInterface[]) => 
 {
@@ -80,10 +82,32 @@ export default function Paying(props: any)
             
 
 
-            <TouchableOpacity style = {style.paywithcash} onPress = {() => addOrder(omid, bucket, false)}>
+            <TouchableOpacity style = {style.paywithcash} 
+                              onPress = {async( ) => {
+
+                                const current_orders: number = (await firestore().collection("queue").get()).docs.filter(adat => adat.data()["payload"].startsWith(omid)).length 
+                                if (current_orders <= 2 )
+                                {
+                                    addOrder(omid, bucket, true);
+                                }else{
+                                    Alert.alert("HIBA", "Legfeljebb 2 rendelésed lehet egyszerre. \n \n Tipp: Nézdd meg az előzö rendeléseidet. A kész rendeléseket kitörölheted")
+                                }
+                            }
+                }>
                 <Image source={require("../../assets/paywithcash.png")}/>
             </TouchableOpacity>
-            <TouchableOpacity style = {style.paywithcard} onPress = {() => addOrder(omid, bucket, true)}>
+            <TouchableOpacity style = {style.paywithcard} 
+                              onPress = {async () => {
+
+                                const current_orders: number = (await firestore().collection("queue").get()).docs.filter(adat => adat.data()["payload"].startsWith(omid)).length 
+                                if (current_orders <= 2 )
+                                {
+                                    addOrder(omid, bucket, true);
+                                }else{
+                                    Alert.alert("HIBA", "Legfeljebb 2 rendelésed lehet egyszerre. \n \n Tipp: Nézdd meg az előzö rendeléseidet. A kész rendeléseket kitörölheted")
+                                }
+                            }
+                            }>
                 <Image source={require("../../assets/paywithcard.png")}/>
             </TouchableOpacity>
             <TouchableOpacity onPress={props.back_button} style = {style.back}>

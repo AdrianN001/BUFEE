@@ -8,7 +8,7 @@ import CartButton from './cart-button';
 import SearchEngine from './search_engine';
 import Profile from './profile';
 import React from 'react';
-import History from './history';
+import ClientOrders from './history';
 import Paying from './paying';
 import { get_data } from '../funcs/firestore';
 
@@ -171,7 +171,7 @@ function Food_page(props: any)
                 }
 
                 {profile && <Profile style = {{ backgroundColor: "#000" }} omid = {om_id} setLogout = {() => props.setLogout(false)} setButton = {() => setProfile(false)}/>}
-                {history && <History style = {{ backgroundColor: "#000" }} omid = {om_id} setButton = {() => setHistory(false)}/>}
+                {history && <ClientOrders style = {{ backgroundColor: "#000" }} omid = {om_id} setButton = {() => setHistory(false)}/>}
                 {paying && <Paying omid = {om_id} updateBucket = {(bucket: FoodInterface[]) => setBucket(bucket)} bucket = {bucket} back_button = {() => setPaying(false)}/>}
 
 

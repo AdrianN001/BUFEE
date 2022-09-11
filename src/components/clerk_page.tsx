@@ -17,19 +17,22 @@ export default function Clerk(props: any)
 
     return (
         <View style = {style.container}>
-            <Image source = {require("../../assets/bufee_logo.png")} style = {style.image}/>
-            <Text style = {style.text}>BUFEE</Text>
+            { !order_open ? <>
+                                <Image source = {require("../../assets/bufee_logo.png")} style = {style.image}/>
+                                <Text style = {style.text}>BUFEE</Text>
 
-            <View  style = {style.order} >
-                <TouchableOpacity onPress={()=>{setOpen(true)}}><Image source = {require("../../assets/rendeles_clerk.png")}/></TouchableOpacity>
-            </View>
-            
+                                <View  style = {style.order} >
+                                    <TouchableOpacity onPress={()=>{setOpen(true)}}><Image source = {require("../../assets/rendeles_clerk.png")}/></TouchableOpacity>
+                                </View>
+                                
 
-            <View style = {style.message} >
-                <TouchableOpacity><Image source = {require("../../assets/message_clerk.png")} /></TouchableOpacity>
-            </View>
+                                <View style = {style.message} >
+                                    <TouchableOpacity><Image source = {require("../../assets/message_clerk.png")} /></TouchableOpacity>
+                                </View>
+                            </>
+                            :<ClerkOrder button_function = {() => setOpen(false)}/>
+                }
             
-            {order_open && <ClerkOrder/>}
 
             <StatusBar style='auto'/>
         </View>

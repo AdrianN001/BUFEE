@@ -71,6 +71,7 @@ export default function Login(props: any) {
   return (
       
       
+    
     <View style={styles.container} >
       
 
@@ -129,7 +130,6 @@ export default function Login(props: any) {
       <StatusBar style="auto" />
 
     </View>
-      
       
   );
 }

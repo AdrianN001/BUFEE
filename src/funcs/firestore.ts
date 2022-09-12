@@ -33,6 +33,9 @@ interface Order_Model{
 
     payload: string[],
     isPayed: boolean,
+    isDeleted: boolean,
+
+    om_id: string
 
     price: number, 
     isDone: boolean, 

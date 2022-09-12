@@ -4,7 +4,7 @@ import { FoodInterface } from "../components/food";
 import {User_Model, Order_Model} from "./firestore"
 import { get_data } from "./firestore";
 
-const generate_payload = (_omid: string, _bucket: FoodInterface[], _isPayed: boolean): string => 
+const generate_payload = (_bucket: FoodInterface[], _isPayed: boolean): string => 
 {
     /* 
      Payload generalas az csak is a vevo "adataibol jon" 
@@ -23,7 +23,7 @@ const generate_payload = (_omid: string, _bucket: FoodInterface[], _isPayed: boo
         second_part = second_part.concat(current_part)
     }
 
-    return `${_omid}<>${second_part}<>${sum_price}<>${_isPayed}`;
+    return `${second_part}<>${sum_price}<>${_isPayed}`;
 }
 
 
@@ -36,7 +36,7 @@ export default async function addOrder(om_id: string, bucket: FoodInterface[], _
     const current_orders = (await firestore().collection("queue").get()).docs.filter(adat => adat.data()["payload"].startsWith(om_id)).length
     console.log("Jelenleg ennyi rendelesed van: %i", current_orders)
 
-    const data_payload = generate_payload(om_id,bucket, _isPayed)
+    const data_payload = generate_payload(bucket, _isPayed)
 
     const last_item = await firestore().collection("queue").orderBy("order_id", "desc").limit(1).get()
 
@@ -49,6 +49,9 @@ export default async function addOrder(om_id: string, bucket: FoodInterface[], _
             payload : data_payload,
             order_id : current_index,
             isDone: false,
+            isDeleted: false,
+
+            om_id: om_id,
             timeCreated: new Date().toLocaleTimeString().replace("AM", "DE").replace("PM", "DU")
         }
     )
@@ -56,7 +59,7 @@ export default async function addOrder(om_id: string, bucket: FoodInterface[], _
 
 export async function listOrders()
 {
-    
+    // Az adatbazisban levo adatokbol visszad egy egyszerubben feldolgozhato adatstrukturat
 
     const data = (await firestore().collection("queue").orderBy("order_id","asc").get()).docs.slice(1)
     
@@ -66,14 +69,16 @@ export async function listOrders()
         
         const {order_id, payload, timeCreated} = order["data"]();
         
-        const [om_id, order_list, price, isPayed] = payload.split("<>")
+        const [order_list, price, isPayed] = payload.split("<>")
+
+        const om_id = order.data()["om_id"]
         
         const {name, class_: _class} = await get_data(om_id)
         
 
         const orders = order_list.split("/v").map((etel:string) => etel.split("/h")[0].substring(1))
         
-        const _order: Order_Model = {_id: order_id, name, _class, payload: orders, price,isPayed ,isDone: false, timeCreated }
+        const _order: Order_Model = {_id: order_id, name, _class, payload: orders, price,isPayed ,isDone: false, isDeleted: false ,timeCreated, om_id: om_id }
         return _order
     }))
 

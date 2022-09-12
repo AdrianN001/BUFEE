@@ -7,6 +7,8 @@ import { listOrders } from "../funcs/order";
 import Order_Panel from "./order_panel";
 import { update } from "lodash";
 
+import firestore, { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
+
 
 function ClerkOrder(props:any)
 {
@@ -26,18 +28,26 @@ function ClerkOrder(props:any)
     return (<View style = {style.container}>
     <View style = {style.scrview}>
         <ScrollView >
-            {
-                orders?.map((elem : Order_Model, index: number) => {
-
+            { //      ne irjon ki olyant ami kesz van vagy torolve lesz
+                orders?.filter(elem => !elem.isDeleted && !elem.isDone).map((elem : Order_Model, index: number) => {
+                    const [ora, perc, ] = elem.timeCreated.split(":")
                     return <Order_Panel  nev = {elem.name}
                                         class_ = {elem._class}
                                         items = {elem.payload}
                                         price = {elem.price}
-                                        timeAdded = {elem.timeCreated}
+                                        timeAdded = {`${ora} : ${perc}`}
                                         key = {index}
                                         style = {style.item}
+                                        delete_button = {async () => {
+                                            const doc = (await firestore().collection("queue").where("order_id", "==", elem._id).get()).metadata
+                                            
+                                        }}
+                                        ready_button = {() => console.log("ASD")}
                                         />
                 } )
+            }
+            {
+                orders?.length === 0 && <Text style = {{marginTop:"50%", fontSize:20, alignSelf:'center',justifyContent:"center"}}> Jelenleg nincsenek rendelések </Text>
             }
         </ScrollView>
     </View>

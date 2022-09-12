@@ -85,12 +85,12 @@ export default function Paying(props: any)
             <TouchableOpacity style = {style.paywithcash} 
                               onPress = {async( ) => {
 
-                                const current_orders: number = (await firestore().collection("queue").get()).docs.filter(adat => adat.data()["payload"].startsWith(omid)).length 
+                                const current_orders: number = (await firestore().collection("queue").where("om_id", "==", omid).get()).docs.length
                                 if (current_orders <= 2 )
                                 {
                                     addOrder(omid, bucket, true);
                                 }else{
-                                    Alert.alert("HIBA", "Legfeljebb 2 rendelésed lehet egyszerre. \n \n Tipp: Nézdd meg az előzö rendeléseidet. A kész rendeléseket kitörölheted")
+                                    Alert.alert("HIBA", "Túl sok rendelésed van leadve egyszerre. \n \n Tipp: Nézdd meg az előzö rendeléseidet. A kész rendeléseket kitörölheted, ezzel hely szabadul fel.")
                                 }
                             }
                 }>
@@ -99,12 +99,12 @@ export default function Paying(props: any)
             <TouchableOpacity style = {style.paywithcard} 
                               onPress = {async () => {
 
-                                const current_orders: number = (await firestore().collection("queue").get()).docs.filter(adat => adat.data()["payload"].startsWith(omid)).length 
+                                const current_orders: number = (await firestore().collection("queue").where("om_id", "==", omid).get()).docs.length
                                 if (current_orders <= 2 )
                                 {
                                     addOrder(omid, bucket, true);
                                 }else{
-                                    Alert.alert("HIBA", "Legfeljebb 2 rendelésed lehet egyszerre. \n \n Tipp: Nézdd meg az előzö rendeléseidet. A kész rendeléseket kitörölheted")
+                                    Alert.alert("HIBA", "Túl sok rendelésed van leadve egyszerre. \n \n Tipp: Nézdd meg az előzö rendeléseidet. A kész rendeléseket kitörölheted, ezzel hely szabadul fel.")
                                 }
                             }
                             }>

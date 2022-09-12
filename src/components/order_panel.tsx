@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable} from 'react-native';
+import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, TouchableHighlight, TouchableOpacity} from 'react-native';
 import { useState } from 'react';
 import {li_with_amount} from "../funcs/utility"
 
@@ -23,6 +23,20 @@ function Order_Panel(props:any)
 
         <Text style = {style.price}>{`${price} Ft.`}</Text>
         <Text style = {style.time}>{timeAdded}</Text>
+
+        <TouchableOpacity style =  {style.ready}>
+            
+            <View >
+                <Text style = {{color:"#38b811", fontSize:30}}>{" KÉSZ"}</Text>
+            </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity>
+            <View style = {style.delete}>
+                <Text  style = {{color:"red", fontSize:25}}>{"RENDELÉS \nTÖRLÉSE"}</Text>
+            </View>
+            
+        </TouchableOpacity>
     </View>)
 }
 
@@ -64,6 +78,17 @@ const style = StyleSheet.create(
             position:'absolute', 
             alignSelf:'center',
             fontSize:20
+        },
+        ready:
+        {
+            width:"25%",
+            marginTop:"35%", 
+            marginLeft:"5%",
+        },
+        delete:
+        {
+            alignSelf:'flex-end',
+            top:"-100%"
         }
     }
 )

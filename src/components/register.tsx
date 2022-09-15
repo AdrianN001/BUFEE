@@ -43,13 +43,13 @@ function Register_Page()
     return (<>
             <View style = {input_styles.padding} >
                 
-                <TextInput value = {om_id} onChangeText= {text => setOMID(text)} style = {{...input_styles.om_id, marginTop:35}} placeholder = "                  OM Azonositó"/>
+                <TextInput value = {om_id} onChangeText= {text => setOMID(text)} style = {{...input_styles.om_id, marginTop:35}} placeholder = "OM Azonositó"/>
 
-                <TextInput  value = {password} onChangeText= {text => setPassword(text)} style = {input_styles.password} placeholder='                       Jelszó'/> 
+                <TextInput  value = {password} onChangeText= {text => setPassword(text)} style = {input_styles.password} placeholder=' Jelszó'/> 
 
-                <TextInput value = {name} onChangeText= {text => setName(text)} style = {{...input_styles.om_id, marginTop: 50}} placeholder = "                  Teljes Neved"/>
+                <TextInput value = {name} onChangeText= {text => setName(text)} style = {{...input_styles.om_id, marginTop: 50}} placeholder = "Teljes Neved"/>
 
-                <TextInput  value = {class_} onChangeText= {text => setClass_(text)} style = {input_styles.password} placeholder='                        Osztály'/> 
+                <TextInput  value = {class_} onChangeText= {text => setClass_(text)} style = {input_styles.password} placeholder='Osztály'/> 
 
                 <View style = {input_styles.button} >
                   <Button title = 'Regisztráció' color= "#554A47" onPress={() => register(om_id,password,name,class_)}/>
@@ -86,6 +86,7 @@ function Register_Page()
         
   
         elevation: 12,
+        textAlign:"center"
       },
       om_id:{
        
@@ -97,7 +98,8 @@ function Register_Page()
         height: 40,
         width: 190,
         backgroundColor: "#8B8B8B",
-        borderRadius: 10
+        borderRadius: 10,
+        textAlign:"center"
       },
       password: {
         fontFamily:'BubblerOne_400Regular',
@@ -108,12 +110,14 @@ function Register_Page()
         width: 190,
   
         backgroundColor: "#8B8B8B",
-        borderRadius: 10
+        borderRadius: 10,
+        textAlign:"center"
       },
       button: {
         marginTop: 30,
         
-        borderRadius: 20
+        borderRadius: 20,
+        textAlign:"center"
         
       },
       register:

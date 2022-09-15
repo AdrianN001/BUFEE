@@ -6,6 +6,7 @@ import React, { useEffect, useRef } from 'react';
 
 function Overlay(props: any)
 {
+    const {isClerk} = props
     //const blink_animation = useRef(new Animated.Value(1)).current;
 
     // useEffect(() => {
@@ -46,19 +47,19 @@ function Overlay(props: any)
 
     return (
         <View>
-            <TouchableHighlight onPressIn={props.activateHistory}>
-                <Image source = {require("../../assets/history_button.png")} style = {style.history}/>
+            <TouchableHighlight onPressIn={props.button_1_function}>
+                <Image source = {!isClerk ? require("../../assets/history_button.png") : require("../../assets/refresh_button.png")} style = {style.history}/>
             </TouchableHighlight>
-            <TouchableHighlight onPressIn={props.activateSearch}>
+            <TouchableHighlight onPressIn={props.button_3_function }>
                 <Text style = {{...style.text, backgroundColor:"rgba(0,0,0,0)"}} >
                     BUFEE
                     
                </Text>
             </TouchableHighlight>
             
-            <TouchableHighlight onPressIn={props.activateProfile}>
+            <TouchableHighlight onPressIn={props.button_2_function}>
                 
-                    <Image source = {require("../../assets/profile_button.png")} style = {style.profile}/>
+                    <Image source = {!isClerk ? require("../../assets/profile_button.png") : require("../../assets/clerk_exit.png")} style = {style.profile}/>
 
                 
             </TouchableHighlight>

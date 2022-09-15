@@ -67,7 +67,7 @@ export async function listOrders()
 
     let _order_list: Promise <Order_Model[]> = Promise.all( data.map(async (order)=>{
         
-        const {order_id, payload, timeCreated} = order["data"]();
+        const {order_id, payload, timeCreated, isDeleted, isDone} = order["data"]();
         
         const [order_list, price, isPayed] = payload.split("<>")
 
@@ -78,11 +78,11 @@ export async function listOrders()
 
         const orders = order_list.split("/v").map((etel:string) => etel.split("/h")[0].substring(1))
         
-        const _order: Order_Model = {_id: order_id, name, _class, payload: orders, price,isPayed ,isDone: false, isDeleted: false ,timeCreated, om_id: om_id }
+        const _order: Order_Model = {_id: order_id, name, _class, payload: orders, price,isPayed ,isDone, isDeleted ,timeCreated, om_id: om_id }
         return _order
     }))
 
-    
-    return await _order_list
+
+    return (await _order_list)
     
 }

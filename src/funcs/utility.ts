@@ -8,7 +8,10 @@ function li_with_amount(lista: string[]) : string[]
 
     for (const elem in occur)
     {
-       new_list.push(`${occur[elem]} db. ${elem}`)
+        if (elem !== "")
+        {
+            new_list.push(`${occur[elem]} db. ${elem.replace("\n","")}`)
+        }
     }
     
     return new_list;

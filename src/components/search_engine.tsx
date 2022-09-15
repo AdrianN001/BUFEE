@@ -2,11 +2,16 @@ import React from "react";
 
 import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView, Alert} from 'react-native';
 import { useState } from "react";
+import { useFonts } from "@expo-google-fonts/dev";
 
 
 export default function SearchEngine(props:any)
 {
     const [search, setSearch] = useState<string>("");
+
+    useFonts({
+        'JetBrains-Mono': require("../../assets/fonts/JetBrainsMono.ttf"),
+    })
 
 
     return (
@@ -40,7 +45,9 @@ const style = StyleSheet.create(
             
             marginTop:8,
             height:"80%",
-            textAlign:"left"
+            textAlign:"center",
+            fontFamily:"JetBrains-Mono"
+            
             
         }
     }

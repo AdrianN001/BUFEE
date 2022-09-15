@@ -3,40 +3,42 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, TouchableHighlight, TouchableOpacity} from 'react-native';
 import { useState } from 'react';
 import {li_with_amount} from "../funcs/utility"
+import { listOrders } from "../funcs/order";
+import { useFonts } from "@expo-google-fonts/dev";
 
 
 function Order_Panel(props:any)
 {
-    const {nev, class_, items, price, timeAdded} = props;
+    const [loaded] = useFonts(
+        {
+            'JetBrains-Mono': require("../../assets/fonts/JetBrainsMono.ttf"),
+        }
+    )
+
+    const {nev, order_id, class_, items, price, timeAdded} = props;
 
     return (<View style = {style.container}>
-        <Text style = {style.name}>{nev}</Text>
-        
-        <Text style = {style.class}>{class_}</Text>
 
-        {
-            li_with_amount(items.slice(0,items.length-1)).map((item: string, index: number) => 
+        <View style = {{height:"50%",}}>
             {
-                return <Text key = {index} style = {{...style.list,position:'absolute', top:`${14 + index * 20}%`}}> {item}</Text>
-            })
-        }
+                li_with_amount(items).map((item:string, index: number) => 
+                {
+                    return (<Text key = {index}
+                                  style = {{...style.list,position:'absolute',top:`${10 + index * 20}%`}}>{`- ${item}`} </Text>)
+                })
+            }
+        </View>
 
-        <Text style = {style.price}>{`${price} Ft.`}</Text>
-        <Text style = {style.time}>{timeAdded}</Text>
+        <Text style = {style.index}>{`#${order_id}`}</Text>
 
-        <TouchableOpacity style =  {style.ready}>
-            
-            <View >
-                <Text style = {{color:"#38b811", fontSize:30}}>{" KÉSZ"}</Text>
-            </View>
+        <TouchableOpacity style ={{position:'absolute', top:"69.6%"}} onPress = {props.delete_button}>
+            <Image source = {require("../../assets/clerk_cancel_order.png")} style = {{width:100,height:100}}/>
         </TouchableOpacity>
 
-        <TouchableOpacity>
-            <View style = {style.delete}>
-                <Text  style = {{color:"red", fontSize:25}}>{"RENDELÉS \nTÖRLÉSE"}</Text>
-            </View>
-            
+        <TouchableOpacity style ={{position:'absolute', top:"70%", left: "25%"}} onPress = {props.ready_button}>
+            <Image source = {require("../../assets/clerk_set_order_ready.png")} style = {{height:100, width:300}}/>
         </TouchableOpacity>
+        
     </View>)
 }
 
@@ -44,16 +46,19 @@ function Order_Panel(props:any)
 const style = StyleSheet.create(
     {
         container:{
-            height: 200,
+            height: 360,
             width: "100%",
-            backgroundColor: "#534F4F",
+            backgroundColor: "#222222",
             borderRadius:12,
             marginBottom:"6%",
         },list:
         {
             textAlign:'center', 
-            alignSelf:'center',
-            color:"white"
+            alignSelf:"flex-start",
+            marginTop:20,
+            marginLeft:30,
+            color:"white",
+            fontFamily:"JetBrains-Mono"
         },
         price: {
             position:'absolute',
@@ -89,6 +94,11 @@ const style = StyleSheet.create(
         {
             alignSelf:'flex-end',
             top:"-100%"
+        },
+        index:{
+            alignSelf:"center",
+            fontSize:40,
+            color:"#E17676",
         }
     }
 )

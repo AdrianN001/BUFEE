@@ -3,11 +3,13 @@ import { useFonts } from '@expo-google-fonts/dev';
 import React, { useEffect, useRef, useState } from 'react';
 import ClerkOrder from './clerk_order';
 import { StatusBar } from 'expo-status-bar';
+import Finished_Orders from './clerk_finished_orders';
 
 
 export default function Clerk(props: any)
 {
     const [order_open, setOpen] = useState<boolean>(false);
+    const [finishedO, setFinished] = useState<boolean>(false);
 
     useFonts(
         {
@@ -29,10 +31,16 @@ export default function Clerk(props: any)
                                 <View style = {style.message} >
                                     <TouchableOpacity><Image source = {require("../../assets/message_clerk.png")} /></TouchableOpacity>
                                 </View>
+
+                                <View style = {style.finished} >
+                                    <TouchableOpacity onPress={()=> {setFinished(true)}}><Image source = {require("../../assets/finished_orders.png")} /></TouchableOpacity>
+                                </View>
                             </>
                             :<ClerkOrder button_function = {() => setOpen(false)}/>
                 }
-            
+            {
+                finishedO && <Finished_Orders back_button = {() => setFinished(false)}/>
+            }
 
             <StatusBar style='auto'/>
         </View>
@@ -67,12 +75,17 @@ const style = StyleSheet.create(
         order:
         {
            position:'absolute',
-           bottom:'40%',
+           bottom:'50%',
            alignSelf:'center',
         },
         message:{
             position:'absolute',
-            bottom:"20%",
+            bottom:"30%",
+            alignSelf:'center',
+        },
+        finished:{
+            position:'absolute',
+            bottom:"10%",
             alignSelf:'center',
         }
     }

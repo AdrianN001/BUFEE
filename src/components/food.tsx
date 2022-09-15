@@ -109,6 +109,7 @@ const style = StyleSheet.create(
         
            color: "#EFEFEF",
            fontSize:20,
+           fontFamily:"JetBrains-Mono",
            alignSelf:"center",
            textAlign:'center',
            marginBottom: 20

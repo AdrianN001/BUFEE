@@ -3,12 +3,12 @@ import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressa
 import { useState, Children, useRef, useEffect, createRef } from 'react';
 import { useFonts } from 'expo-font';
 import Food, {FoodInterface} from './food';
-import Overlay from './food_page_overlay';
+import Overlay from './Overlay';
 import CartButton from './cart-button';
 import SearchEngine from './search_engine';
 import Profile from './profile';
 import React from 'react';
-import ClientOrders from './history';
+import ClientOrders from './ClientOrders';
 import Paying from './paying';
 import { get_data } from '../funcs/firestore';
 
@@ -160,9 +160,10 @@ function Food_page(props: any)
                 {
                     offset < 110 && <View style = {{...style.overlay,transform: [{translateY: offset}]}}  >
                         <Overlay  
-                            activateHistory = {() => setHistory(true)} 
-                            activateProfile = {() => setProfile(true)} 
-                            activateSearch = {() => setSearch(!searching)}
+                            isClerk = {false}
+                            button_1_function = {() => setHistory(true)} 
+                            button_2_function = {() => setProfile(true)} 
+                            button_3_function = {() => setSearch(!searching)}
 
                             //style = {{backgroundColor: `rgba(0,0,0,${opacity_1})`}}
 

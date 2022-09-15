@@ -2,7 +2,8 @@ import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 import { useFonts } from "expo-font";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView, Alert, TouchableOpacity} from 'react-native';
-import { get_data } from "../funcs/firestore";
+import { get_data, Order_Model } from "../funcs/firestore";
+import { listOrders } from "../funcs/order";
 
 
 
@@ -10,8 +11,7 @@ export default function ClientOrders(props:any)
 {
     const OMID:string = props.omid.toString()
 
-
-    const [data, setData] = useState< FirebaseFirestoreTypes.DocumentData >()
+    const [orders, setOrders] = useState<Order_Model[]>();
 
 
     let [loaded] = useFonts(
@@ -22,21 +22,24 @@ export default function ClientOrders(props:any)
         }
     )
 
-    
-
     //resolving a Promise in a Functional Component
     useEffect(() =>{
-        get_data(OMID.toString()).then(
-            data => {console.log(data); setData(data)}
-        )
+
+        (async () => {setOrders(await listOrders())})()
+
     },[])
 
 
     return (
         <View style = {style.container}>
              <Text style = {style.title}>RENDELÉSEK</Text>
+             <View style = {{height:"60%", width:"100%",backgroundColor:"red",top:"20%"}}>
+
+                {orders?.filter(elem => elem.om_id === OMID).map((elem,index) => {
+                    return <Text style = {{fontSize : 30}}>{}</Text>
+                })}
+             </View>
                 
-                <Text style = {{alignSelf: "center", position:'absolute',top:"50%", fontSize:20,color:"red"}}>%YOUR ORDERS%</Text>
 
              <TouchableOpacity onPress={props.setButton} style = {style.back}><Image source={ require("../../assets/back_button.png")}/></TouchableOpacity>
         </View>

@@ -81,12 +81,12 @@ export default function Login(props: any) {
         <Text style = {bufee_logo_style.text}>BUFEE</Text>
 
         <View style = {input_styles.padding} >
-          <TextInput value = {om_id} onChangeText= {text => setOMID(text)} style = {input_styles.om_id} placeholder = "                OM Azonositó"/>
+          <TextInput value = {om_id} onChangeText= {text => setOMID(text)} style = {input_styles.om_id} placeholder = "OM Azonositó"/>
 
-          <TextInput  value = {password} onChangeText= {text => setPassword(text)} style = {input_styles.password} placeholder='                     Jelszó'/> 
+          <TextInput  value = {password} secureTextEntry = {true} onChangeText= {text => setPassword(text)} style = {input_styles.password} placeholder='Jelszó'/> 
 
           <View style = {input_styles.button} >
-            <Button title = 'Bejelentkezés' color= "#392580" onPress={async () =>{
+            <Button title = 'Bejelentkezés' color= "#E17676" onPress={async () =>{
                       const can_login = await button_function(om_id,password);
                       if (!can_login) return;
                       else {
@@ -210,7 +210,9 @@ const input_styles = StyleSheet.create(
       height: 40,
       width: 190,
       backgroundColor: "#8B8B8B",
-      borderRadius: 10
+      borderRadius: 10,
+      fontSize:20,
+      textAlign:"center"
     },
     password: {
       fontFamily:'BubblerOne_400Regular',
@@ -221,7 +223,9 @@ const input_styles = StyleSheet.create(
       width: 190,
 
       backgroundColor: "#8B8B8B",
-      borderRadius: 10
+      borderRadius: 10,
+      fontSize:15,
+      textAlign:"center"
     },
     button: {
       marginTop: 30,

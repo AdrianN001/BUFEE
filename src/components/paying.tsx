@@ -88,9 +88,9 @@ export default function Paying(props: any)
                                 const current_orders: number = (await firestore().collection("queue").where("om_id", "==", omid).get()).docs.length
                                 if (current_orders <= 2 )
                                 {
-                                    addOrder(omid, bucket, true);
+                                    addOrder(omid, bucket, false);
                                 }else{
-                                    Alert.alert("HIBA", "Túl sok rendelésed van leadve egyszerre. \n \n Tipp: Nézdd meg az előzö rendeléseidet. A kész rendeléseket kitörölheted, ezzel hely szabadul fel.")
+                                    Alert.alert("HIBA", "Túl sok rendelésed van leadve egyszerre. \n \n Tipp: Nézdd meg az előzö rendeléseidet. A visszavont rendeléseket kitörölheted, ezzel hely szabadul fel.")
                                 }
                             }
                 }>

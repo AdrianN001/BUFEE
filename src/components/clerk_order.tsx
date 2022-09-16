@@ -13,8 +13,17 @@ import firestore, { FirebaseFirestoreTypes } from "@react-native-firebase/firest
 function ClerkOrder(props:any)
 {
     const [orders, setOrder] = useState<Order_Model[]>();
-    
+
     const rendeles_menny = useRef<number>(0);
+
+    // Animacio
+    const [position, setPositon] = useState<number>(0);
+    const [offset, setOffset] = useState<number>(0);
+    
+
+
+    const PANEL_HEIGHT = 360;
+    const BLUR_TRESHOLD = .8;
 
     useEffect(
         () =>{
@@ -24,12 +33,37 @@ function ClerkOrder(props:any)
            })();
             
         },[])
+    useEffect(() => {
+
+                        
+
+            if (position * 2 > (rendeles_menny.current * PANEL_HEIGHT) * BLUR_TRESHOLD &&  rendeles_menny.current > 5) 
+            {
+                const useful_position = position * 2
+                
+    
+                const max_offset =  (rendeles_menny.current * PANEL_HEIGHT) * .2 / 1.59
+                
+                const actual_Offset: number = useful_position - (rendeles_menny.current * PANEL_HEIGHT) * BLUR_TRESHOLD
+    
+                //const actual_Opacity: number = parseInt((actual_Offset / max_offset).toFixed(2))
+    
+                setOffset(Math.round(actual_Offset))
+                //setOpacity(actual_Opacity)
+    
+            }else {
+                //setOpacity(1)
+                setOffset(0)
+            }
+    
+        },[position])
     
     console.log("Rendelesek panell frisstive")
 
     return (<View style = {style.container}>
     <View style = {style.scrview}>
-        <ScrollView >
+        <ScrollView 
+         onScroll = {e => {setPositon( e.nativeEvent.contentOffset.y )}} >
             { //      ne irjon ki olyant ami kesz van vagy torolve lesz
                 orders?.filter(elem => !elem.isDeleted && !elem.isDone).map((elem : Order_Model, index: number) => {
                     rendeles_menny.current++;
@@ -63,7 +97,7 @@ function ClerkOrder(props:any)
             }
         </ScrollView>
     </View>
-    <View style = {style.overlay}>
+    <View style = {{...style.overlay, transform: [{translateY:offset}]}}>
 
         <Overlay 
         isClerk = {true}
@@ -109,7 +143,7 @@ const style = StyleSheet.create(
             bottom:10,
     
     
-            backgroundColor: "#222222",
+            backgroundColor: "#1a1919",
             borderRadius: 30,
             height:100,
             width: "98%",

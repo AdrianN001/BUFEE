@@ -32,11 +32,11 @@ function Order_Panel(props:any)
         <Text style = {style.index}>{`#${order_id}`}</Text>
 
         <TouchableOpacity style ={{position:'absolute', top:"69.6%"}} onPress = {props.delete_button}>
-            <Image source = {require("../../assets/clerk_cancel_order.png")} style = {{width:100,height:100}}/>
+            <Image source = {require("../../assets/clerk_cancel_order.png")} style = {{width:90,height:90}}/>
         </TouchableOpacity>
 
         <TouchableOpacity style ={{position:'absolute', top:"70%", left: "25%"}} onPress = {props.ready_button}>
-            <Image source = {require("../../assets/clerk_set_order_ready.png")} style = {{height:100, width:300}}/>
+            <Image source = {require("../../assets/clerk_set_order_ready.png")} style = {{height:90, width:270}}/>
         </TouchableOpacity>
         
     </View>)

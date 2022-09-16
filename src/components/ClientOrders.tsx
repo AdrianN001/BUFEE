@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView, Alert, TouchableOpacity} from 'react-native';
 import { get_data, Order_Model } from "../funcs/firestore";
 import { listOrders } from "../funcs/order";
-
+import ClientOrder from "./Client_Order";
 
 
 export default function ClientOrders(props:any)
@@ -33,13 +33,23 @@ export default function ClientOrders(props:any)
     return (
         <View style = {style.container}>
              <Text style = {style.title}>RENDELÉSEK</Text>
-             <View style = {{height:"60%", width:"100%",backgroundColor:"red",top:"20%"}}>
+             <View style = {{height:"70%", width:"100%",top:"20%"}}>
 
-                {orders?.filter(elem => elem.om_id === OMID).map((elem,index) => {
-                    return <Text style = {{fontSize : 30}}>{}</Text>
-                })}
+             
+                <ScrollView >
+
+                    {orders?.filter(elem => elem.om_id === OMID).map((elem, index) => {
+                        return <ClientOrder key = {index}
+                                            items = {elem.payload}
+                                            order_id = {elem._id}
+                                            price = {elem.price}
+                                            isDone = {elem.isDone}
+                                            isDeleted = {elem.isDeleted}
+                                            isPayed = {elem.isPayed}
+                                            refresh = {async () => setOrders(await listOrders())}/>
+                    })}
+                </ScrollView>
              </View>
-                
 
              <TouchableOpacity onPress={props.setButton} style = {style.back}><Image source={ require("../../assets/back_button.png")}/></TouchableOpacity>
         </View>
@@ -62,7 +72,7 @@ const style = StyleSheet.create(
             position:'absolute',
             top:"5%",
             alignSelf:'center',
-            fontSize:60,
+            fontSize:45,
             fontFamily:'Caveat',
             color:"#E17676",
             fontStyle:'italic',
@@ -72,7 +82,7 @@ const style = StyleSheet.create(
         },
         back: {
             position:'absolute',
-            bottom:"8%",
+            bottom:".5%",
             alignSelf:'center'
         },data:
         {

@@ -21,7 +21,6 @@ export interface FoodInterface{
 function Food(props: any): JSX.Element{  //props-nak nem lehet Interface-t megadni, mivel a babel nem kedvelne i guess
     const {image, name, price, id, callback} = props
 
-    
 
 
     const [loaded] = useFonts({
@@ -36,12 +35,12 @@ function Food(props: any): JSX.Element{  //props-nak nem lehet Interface-t megad
     }
 
     return (<View style = {style.container} onLayout = {(evt:any) => {props.getHeight(evt.nativeEvent.layout.height)}}>
-                <View style = {{width:90}}><Image source = {image ?? require("../../assets/icon.png")} style = {style.image} /></View>
+                {false && <View style = {{width:90}}><Image source = {image ?? require("../../assets/icon.png")} style = {style.image} /></View>}
                 
                 <View style = {style.text_container}>
 
                 
-                    <Text style = {style.name}>{name ?? "%Name%"}</Text>
+                    <Text style = {{...style.name, fontSize:20}}>{name ?? "%Name%"}</Text>
 
 
                     <Text style = {style.price}>{price ?? "%Price%"}</Text>
@@ -108,7 +107,6 @@ const style = StyleSheet.create(
         name:{
         
            color: "#EFEFEF",
-           fontSize:20,
            fontFamily:"JetBrains-Mono",
            alignSelf:"center",
            textAlign:'center',

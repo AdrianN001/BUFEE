@@ -69,7 +69,8 @@ export async function listOrders()
         
         const {order_id, payload, timeCreated, isDeleted, isDone} = order["data"]();
         
-        const [order_list, price, isPayed] = payload.split("<>")
+        const [order_list, price, isPayed_string] = payload.split("<>")
+        const isPayed: boolean = isPayed_string === "true" ? true : false
 
         const om_id = order.data()["om_id"]
         

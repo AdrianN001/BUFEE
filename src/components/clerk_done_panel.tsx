@@ -26,9 +26,9 @@ function Finished_Order(props:any) : JSX.Element
             
             
         </TouchableOpacity>
-        <Pressable onPress={props.paymentDone}>
+        <TouchableWithoutFeedback onPress={props.paymentDone}>
             <Image source = {require("../../assets/atvetel_gomb.png")} style = {style.button}/>
-        </Pressable>
+        </TouchableWithoutFeedback>
     </View>)
 
 }
@@ -61,7 +61,7 @@ const style = StyleSheet.create({
     button:{
         alignSelf:"center",
         position:'absolute',
-        top:10
+        bottom:20
     }
 })
 

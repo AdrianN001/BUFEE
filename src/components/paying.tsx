@@ -83,30 +83,36 @@ export default function Paying(props: any)
 
 
             <TouchableOpacity style = {style.paywithcash} 
-                              onPress = {async( ) => {
+                              onLongPress = {() => setTimeout(async( ) => {
 
                                 const current_orders: number = (await firestore().collection("queue").where("om_id", "==", omid).get()).docs.length
                                 if (current_orders <= 2 )
                                 {
                                     addOrder(omid, bucket, false);
+                                    Alert.alert("Rendelésed feladva", " ")
                                 }else{
                                     Alert.alert("HIBA", "Túl sok rendelésed van leadve egyszerre. \n \n Tipp: Nézdd meg az előzö rendeléseidet. A visszavont rendeléseket kitörölheted, ezzel hely szabadul fel.")
                                 }
-                            }
+                            }, 1000)
                 }>
                 <Image source={require("../../assets/paywithcash.png")}/>
             </TouchableOpacity>
             <TouchableOpacity style = {style.paywithcard} 
-                              onPress = {async () => {
+                              onLongPress = {() => setTimeout(async () => {
 
                                 const current_orders: number = (await firestore().collection("queue").where("om_id", "==", omid).get()).docs.length
-                                if (current_orders <= 2 )
+                                const finished_orders: number = (await firestore().collection("finished_orders").where("om_id", "==", omid).get()).docs.length
+                                const deleted_orders:number = (await firestore().collection("deleted_orders").where("om_id", "==", omid).get()).docs.length
+
+                                const sum_of_orders = current_orders + finished_orders + deleted_orders
+                                if (sum_of_orders <= 2 )
                                 {
                                     addOrder(omid, bucket, true);
+                                    Alert.alert("Rendelésed feladva", " ")
                                 }else{
                                     Alert.alert("HIBA", "Túl sok rendelésed van leadve egyszerre. \n \n Tipp: Nézdd meg az előzö rendeléseidet. A kész rendeléseket kitörölheted, ezzel hely szabadul fel.")
                                 }
-                            }
+                            },1000)
                             }>
                 <Image source={require("../../assets/paywithcard.png")}/>
             </TouchableOpacity>

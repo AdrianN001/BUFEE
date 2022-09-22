@@ -1,9 +1,9 @@
 import React, { useEffect, useReducer, useRef } from "react";
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView, TouchableHighlight, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView, TouchableHighlight, TouchableOpacity, Alert} from 'react-native';
 import { useState } from 'react';
 import {get_data, Order_Model} from "../funcs/firestore";
-import { listOrders } from "../funcs/order";
+import { listOrders, listOrder_Site , ITEMS_PER_PAGE} from "../funcs/order";
 import Order_Panel from "./order_panel";
 import Overlay from "./Overlay";
 
@@ -13,8 +13,12 @@ import firestore, { FirebaseFirestoreTypes } from "@react-native-firebase/firest
 function ClerkOrder(props:any)
 {
     const [orders, setOrder] = useState<Order_Model[]>();
+   
+    const page = useRef<number>(0);
 
-    const rendeles_menny = useRef<number>(0);
+    const rendeles_menny = useRef<number>(1);
+
+    const [osszes_oldal, setOldal] = useState<number>(0);
 
     // Animacio
     const [position, setPositon] = useState<number>(0);
@@ -23,23 +27,28 @@ function ClerkOrder(props:any)
 
 
     const PANEL_HEIGHT = 360;
-    const BLUR_TRESHOLD = .8;
+    const BLUR_TRESHOLD = .6;
 
     useEffect(
         () =>{
            (async () => {
-            setOrder(await listOrders());
+            const data = await listOrder_Site(1)
+            setOldal( Math.ceil((await listOrders()).length / ITEMS_PER_PAGE) )
+            
+            setOrder(data);
             
            })();
             
         },[])
+    
     useEffect(() => {
 
-                        
-
-            if (position * 2 > (rendeles_menny.current * PANEL_HEIGHT) * BLUR_TRESHOLD &&  rendeles_menny.current > 5) 
+            if (position * 2 > 4 * PANEL_HEIGHT * BLUR_TRESHOLD ) 
             {
+                
                 const useful_position = position * 2
+
+
                 
     
                 const max_offset =  (rendeles_menny.current * PANEL_HEIGHT) * .2 / 1.59
@@ -58,15 +67,16 @@ function ClerkOrder(props:any)
     
         },[position])
     
-    console.log("Rendelesek panell frisstive")
+    
 
     return (<View style = {style.container}>
     <View style = {style.scrview}>
         <ScrollView 
          onScroll = {e => {setPositon( e.nativeEvent.contentOffset.y )}} >
             { //      ne irjon ki olyant ami kesz van vagy torolve lesz
-                orders?.filter(elem => !elem.isDeleted && !elem.isDone).map((elem : Order_Model, index: number) => {
+                orders?.map((elem : Order_Model, index: number) => {
                     rendeles_menny.current++;
+                    
 
                     const [ora, perc, ] = elem.timeCreated.split(":")
                     return <Order_Panel order_id = {elem._id}
@@ -78,16 +88,19 @@ function ClerkOrder(props:any)
                                         style = {style.item}
                                         delete_button = {async () => {
                                             const doc = await firestore().collection("queue").where("order_id", "==", elem._id).get()
-                                            await doc.docs[0].ref.update({isDeleted: true});
+                                            firestore().collection("deleted_orders").add({...doc.docs[0].data()})
+                                            await doc.docs[0].ref.delete();
                                             rendeles_menny.current--;
-                                            setOrder(await listOrders())
+                                            setOrder(await listOrder_Site(page.current))
                                         }}
                                         ready_button = {async () =>
                                         {
                                             const doc = await firestore().collection("queue").where("order_id", "==", elem._id).get()
-                                            await doc.docs[0].ref.update({isDone: true});
+                                            
+                                            firestore().collection("finished_orders").add({...doc.docs[0].data()})
+                                            await doc.docs[0].ref.delete();
                                             rendeles_menny.current--;
-                                            setOrder(await listOrders())
+                                            setOrder(await listOrder_Site(page.current))
                                         }}
                                         />
                 } )
@@ -101,7 +114,48 @@ function ClerkOrder(props:any)
 
         <Overlay 
         isClerk = {true}
-        button_1_function = {async () => setOrder(await listOrders())}
+
+        greater_than = {() => {
+            console.log("ASD %i \n ASD2 %i", page.current, osszes_oldal)
+            if (page.current === osszes_oldal ){
+                console.log("ASD")
+                return Alert.alert("ELÉRTÉL AZ UTOLSÓ OLDALIG")
+                
+            }
+            page.current++
+            (async () => {
+                const data = await listOrder_Site(page.current)
+                
+                setOrder(data);
+                
+               })();
+            
+            }
+        }
+        less_than = {() => {
+            if (page.current < 2) { return; }
+            
+            
+            page.current--
+            (async () => {
+                
+
+                
+                try{
+                    const data = await listOrder_Site(page.current)
+                    setOrder(data);
+                    
+                }
+                
+                catch (err)
+                {
+                   
+                }
+               })();
+            }
+        }
+
+        button_1_function = {async () => setOrder(await listOrder_Site(page.current))}
         button_2_function = {props.button_function}/>
     </View>
     </View>)

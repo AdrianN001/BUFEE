@@ -94,6 +94,7 @@ function Food_page(props: any)
                                                 {  
                                                     
                                                     return (<TouchableOpacity
+                                                            key = {id}
                                                             onLongPress={
                                                                 () => {
                                                                     const bucket_1 = bucket ?? []

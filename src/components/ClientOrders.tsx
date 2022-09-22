@@ -3,7 +3,7 @@ import { useFonts } from "expo-font";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView, Alert, TouchableOpacity} from 'react-native';
 import { get_data, Order_Model } from "../funcs/firestore";
-import { listOrders } from "../funcs/order";
+import { listOrders, list_client_orders } from "../funcs/order";
 import ClientOrder from "./Client_Order";
 
 
@@ -25,7 +25,7 @@ export default function ClientOrders(props:any)
     //resolving a Promise in a Functional Component
     useEffect(() =>{
 
-        (async () => {setOrders(await listOrders())})()
+        (async () => {setOrders(await list_client_orders(OMID))})()
 
     },[])
 
@@ -38,7 +38,7 @@ export default function ClientOrders(props:any)
              
                 <ScrollView >
 
-                    {orders?.filter(elem => elem.om_id === OMID).map((elem, index) => {
+                    {orders?.map((elem, index) => {
                         return <ClientOrder key = {index}
                                             items = {elem.payload}
                                             order_id = {elem._id}

@@ -7,6 +7,7 @@ import React, { useEffect, useRef } from 'react';
 function Overlay(props: any)
 {
     const {isClerk} = props
+
     //const blink_animation = useRef(new Animated.Value(1)).current;
 
     // useEffect(() => {
@@ -50,14 +51,24 @@ function Overlay(props: any)
             <TouchableHighlight onPressIn={props.button_1_function}>
                 <Image source = {!isClerk ? require("../../assets/history_button.png") : require("../../assets/refresh_button.png")} style = {style.history}/>
             </TouchableHighlight>
-            <TouchableHighlight onPressIn={props.button_3_function }>
+            {!isClerk ? <TouchableHighlight onPressIn={props.button_3_function }>
                 <Text style = {{...style.text, backgroundColor:"rgba(0,0,0,0)"}} >
                     BUFEE
                     
                </Text>
             </TouchableHighlight>
+                    : <View style = {style.images}>
+                    <TouchableOpacity onLongPress={props.less_than}>
+                        <Image source = {require("../../assets/less-than.png")} 
+                        style = {{position:'absolute', right:15, top:5, width:"40%", height:90}}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onLongPress={props.greater_than}>
+                        <Image source = {require("../../assets/greater-than.png")} 
+                        style = {{position:'absolute',left:15, top:5, width:"40%", height:90}}/>
+                    </TouchableOpacity>
+                    </View>}
             
-            <TouchableHighlight onPressIn={props.button_2_function}>
+            <TouchableHighlight onPressIn={props.button_2_function} style = {{backgroundColor:"red"}}>
                 
                     <Image source = {!isClerk ? require("../../assets/profile_button.png") : require("../../assets/clerk_exit.png")} style = {style.profile}/>
 
@@ -107,6 +118,14 @@ const style = StyleSheet.create(
             textShadowColor: 'rgba(225, 118, 118, 0.7)',
             textShadowOffset: {width: 1, height: -1},
             textShadowRadius: 20
+            
+        },
+        images:
+        {
+            alignSelf:"center",
+            width:"58%",
+            borderRadius:20,
+            alignItems:'center',
             
         }
         

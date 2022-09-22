@@ -26,6 +26,8 @@ interface User_Model{
     
 }
 interface Order_Model{
+    isDeleted?: boolean;
+    isDone?:boolean,
     _id?: any
 
     name: string,
@@ -33,12 +35,11 @@ interface Order_Model{
 
     payload: string[],
     isPayed: boolean,
-    isDeleted: boolean,
+    
 
     om_id: string
 
     price: number, 
-    isDone: boolean, 
 
     timeCreated: string
 }

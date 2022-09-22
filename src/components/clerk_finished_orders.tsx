@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressa
 import { useState } from 'react';
 import { Order_Model } from "../funcs/firestore";
 import Finished_Order from "./clerk_done_panel";
-import { listOrders } from "../funcs/order";
+import { listOrders, list_finished_orders } from "../funcs/order";
 import firestore, { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 
 
@@ -18,7 +18,10 @@ function Finished_Orders(props:any)
 
     useEffect(() =>
     {
-        ( async () => { setOrder(await listOrders())} ) ()
+        ( async () => { 
+            const data = await list_finished_orders()
+            console.log(data.length)
+            setOrder(data)} ) ()
     }, [])
 
 
@@ -34,7 +37,7 @@ function Finished_Orders(props:any)
             <ScrollView>
             
                 {
-                    orders?.filter(elem => !elem.isDeleted && elem.isDone).map((elem : Order_Model, index: number) => {
+                    orders?.map((elem : Order_Model, index: number) => {
                         kesz_Rendelesek.current++
                         
                         if (new RegExp(filter).test(elem._id.toString()))
@@ -61,12 +64,12 @@ function Finished_Orders(props:any)
                                                                     onPress: async () => {
                                                                         try{
 
-                                                                            (await firestore().collection("queue").where("order_id", "==", elem._id).get()).docs[0].ref.delete()
+                                                                            (await firestore().collection("finished_orders").where("order_id", "==", elem._id).get()).docs[0].ref.delete()
                                                                         }catch(err)
                                                                         {
                                                                             console.log(err)
                                                                         }
-                                                                        setOrder(await listOrders())
+                                                                        setOrder(await list_finished_orders())
                                                                     } 
                                                                 }
                                                             ]

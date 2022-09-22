@@ -57,6 +57,31 @@ export default async function addOrder(om_id: string, bucket: FoodInterface[], _
     )
 }
 
+const translate_data = async(data: FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData>[]): Promise<Order_Model[]> => {
+
+    let _order_list: Promise <Order_Model[]> = Promise.all( data.map(async (order)=>{
+        
+        const {order_id, payload, timeCreated, isDeleted, isDone} = order["data"]();
+        
+        const [order_list, price, isPayed_string] = payload.split("<>")
+        const isPayed: boolean = isPayed_string === "true" ? true : false
+
+        const om_id = order.data()["om_id"]
+        
+        const {name, class_: _class} = await get_data(om_id)
+        
+
+        const orders = order_list.split("/v").map((etel:string) => etel.split("/h")[0].substring(1))
+        
+        const _order: Order_Model = {_id: order_id, name, _class, payload: orders, price,isPayed  ,timeCreated, om_id: om_id }
+        return _order
+    }))
+
+    return await _order_list
+    
+    
+}
+
 export async function listOrders()
 {
     // Az adatbazisban levo adatokbol visszad egy egyszerubben feldolgozhato adatstrukturat
@@ -79,11 +104,99 @@ export async function listOrders()
 
         const orders = order_list.split("/v").map((etel:string) => etel.split("/h")[0].substring(1))
         
-        const _order: Order_Model = {_id: order_id, name, _class, payload: orders, price,isPayed ,isDone, isDeleted ,timeCreated, om_id: om_id }
+        const _order: Order_Model = {_id: order_id, name, _class, payload: orders, price,isPayed  ,timeCreated, om_id: om_id }
         return _order
     }))
 
 
     return (await _order_list)
+    
+}
+export async function list_finished_orders()
+{
+    // Az adatbazisban levo adatokbol visszad egy egyszerubben feldolgozhato adatstrukturat
+
+    const data = (await firestore().collection("finished_orders").orderBy("order_id","asc").get()).docs
+    
+    console.log(data.length)
+
+    let _order_list: Promise <Order_Model[]> = Promise.all( data.map(async (order)=>{
+        
+        const {order_id, payload, timeCreated, isDeleted, isDone} = order["data"]();
+        
+        const [order_list, price, isPayed_string] = payload.split("<>")
+        const isPayed: boolean = isPayed_string === "true" ? true : false
+
+        const om_id = order.data()["om_id"]
+        
+        const {name, class_: _class} = await get_data(om_id)
+        
+
+        const orders = order_list.split("/v").map((etel:string) => etel.split("/h")[0].substring(1))
+        
+        const _order: Order_Model = {_id: order_id, name, _class, payload: orders, price,isPayed ,timeCreated, om_id: om_id }
+        return _order
+    }))
+
+
+    return (await _order_list)
+    
+}
+
+
+export const ITEMS_PER_PAGE = 3 // ami gyakorlatilag 3 
+
+export const listOrder_Site = async (oldal: number) => {
+    if (oldal < 1){return ;}
+
+    
+
+
+    /*
+            const endAtRes = await db.collection('cities')
+        .orderBy('population')
+        .endAt(1000000)
+        .get();
+  */
+   //const data = (await firestore().collection("queue").orderBy("order_id","asc").startAfter((( oldal - 1 ) * ITEMS_PER_PAGE)).endAt((oldal * ITEMS_PER_PAGE) + 1).get()).docs
+   const data = (await firestore().collection("queue").orderBy("order_id","asc").get()).docs.slice(ITEMS_PER_PAGE - 1 * oldal, ITEMS_PER_PAGE * oldal + 1)
+    console.log(data)
+    
+
+    
+
+    let _order_list: Promise <Order_Model[]> = Promise.all( data.map(async (order)=>{
+        
+                                                        const {order_id, payload, timeCreated} = order["data"]();
+                                                        
+                                                        const [order_list, price, isPayed_string] = payload.split("<>")
+                                                        const isPayed: boolean = isPayed_string === "true" ? true : false
+                                                
+                                                        const om_id = order.data()["om_id"]
+                                                        
+                                                        const {name, class_: _class} = await get_data(om_id)
+                                                        
+                                                
+                                                        const orders = order_list.split("/v").map((etel:string) => etel.split("/h")[0].substring(1))
+                                                        
+                                                        const _order: Order_Model = {_id: order_id, name, _class, payload: orders, price,isPayed ,timeCreated, om_id: om_id }
+                                                        return _order
+                                                    }))
+
+                                                
+                                                
+        return (await _order_list)
+}
+
+export const list_client_orders = async (om_id: string) : Promise <Order_Model[]> => {
+    const inQueue = (await firestore().collection("queue").where("om_id", "==", om_id).get()).docs
+    const inDeleted = (await firestore().collection("deleted_orders").where("om_id", "==", om_id).get()).docs
+    const inFinished = (await firestore().collection("finished_orders").where("om_id", "==", om_id).get()).docs
+
+    return [...(await translate_data(inQueue)).map(adat => {return {...adat, isDone: false, isDeleted: false}}) // metaadatnak hozzaadni rendeleshez
+
+          , ... (await translate_data(inFinished)).map(adat => {return {...adat,isDone: true, isDeleted:false}})
+
+          , ...(await translate_data(inDeleted)).map(adat => {return {...adat, isDone:false, isDeleted:true}})]
     
 }

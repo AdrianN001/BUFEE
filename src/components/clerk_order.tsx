@@ -14,7 +14,7 @@ function ClerkOrder(props:any)
 {
     const [orders, setOrder] = useState<Order_Model[]>();
    
-    const page = useRef<number>(0);
+    const [page, setPage] = useState<number>(0);
 
     const rendeles_menny = useRef<number>(1);
 
@@ -32,7 +32,8 @@ function ClerkOrder(props:any)
     useEffect(
         () =>{
            (async () => {
-            const data = await listOrder_Site(1)
+            const data = await listOrder_Site(0)
+            console.log(data)
             setOldal( Math.ceil((await listOrders()).length / ITEMS_PER_PAGE) )
             
             setOrder(data);
@@ -40,7 +41,7 @@ function ClerkOrder(props:any)
            })();
             
         },[])
-    
+    console.log(page)
     useEffect(() => {
 
             if (position * 2 > 4 * PANEL_HEIGHT * BLUR_TRESHOLD ) 
@@ -91,7 +92,7 @@ function ClerkOrder(props:any)
                                             firestore().collection("deleted_orders").add({...doc.docs[0].data()})
                                             await doc.docs[0].ref.delete();
                                             rendeles_menny.current--;
-                                            setOrder(await listOrder_Site(page.current))
+                                            setOrder(await listOrder_Site(page))
                                         }}
                                         ready_button = {async () =>
                                         {
@@ -100,7 +101,7 @@ function ClerkOrder(props:any)
                                             firestore().collection("finished_orders").add({...doc.docs[0].data()})
                                             await doc.docs[0].ref.delete();
                                             rendeles_menny.current--;
-                                            setOrder(await listOrder_Site(page.current))
+                                            setOrder(await listOrder_Site(page))
                                         }}
                                         />
                 } )
@@ -116,15 +117,15 @@ function ClerkOrder(props:any)
         isClerk = {true}
 
         greater_than = {() => {
-            console.log("ASD %i \n ASD2 %i", page.current, osszes_oldal)
-            if (page.current === osszes_oldal ){
+            console.log("ASD %i \n ASD2 %i", page, osszes_oldal)
+            if (page === osszes_oldal ){
                 console.log("ASD")
                 return Alert.alert("ELÉRTÉL AZ UTOLSÓ OLDALIG")
                 
             }
-            page.current++
+            setPage(page + 1 );
             (async () => {
-                const data = await listOrder_Site(page.current)
+                const data = await listOrder_Site(page)
                 
                 setOrder(data);
                 
@@ -133,16 +134,16 @@ function ClerkOrder(props:any)
             }
         }
         less_than = {() => {
-            if (page.current < 2) { return; }
+            if (page < 2) { return; }
             
             
-            page.current--
+            setPage(page - 1);
             (async () => {
                 
 
                 
                 try{
-                    const data = await listOrder_Site(page.current)
+                    const data = await listOrder_Site(page)
                     setOrder(data);
                     
                 }
@@ -155,7 +156,7 @@ function ClerkOrder(props:any)
             }
         }
 
-        button_1_function = {async () => setOrder(await listOrder_Site(page.current))}
+        button_1_function = {async () => setOrder(await listOrder_Site(page))}
         button_2_function = {props.button_function}/>
     </View>
     </View>)

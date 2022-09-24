@@ -38,9 +38,7 @@ export default async function addOrder(om_id: string, bucket: FoodInterface[], _
 
     const data_payload = generate_payload(bucket, _isPayed)
 
-    const last_item = await firestore().collection("queue").orderBy("order_id", "desc").limit(1).get()
-
-    const last_index: number = parseInt(last_item.docs[0].data()['order_id'])
+    const last_index = parseInt(await (await firestore().collection("queue").orderBy("order_id", "desc").limit(1).get()).docs[0].data().order_id) ?? 0;
     
     const current_index = last_index + 1
 
@@ -86,7 +84,7 @@ export async function listOrders()
 {
     // Az adatbazisban levo adatokbol visszad egy egyszerubben feldolgozhato adatstrukturat
 
-    const data = (await firestore().collection("queue").orderBy("order_id","asc").get()).docs.slice(1)
+    const data = (await firestore().collection("queue").orderBy("order_id","asc").get()).docs
     
     console.log(data.length)
 
@@ -144,12 +142,11 @@ export async function list_finished_orders()
 }
 
 
-export const ITEMS_PER_PAGE = 3 // ami gyakorlatilag 3 
+export const ITEMS_PER_PAGE = 4 // ami gyakorlatilag 3 
 
 export const listOrder_Site = async (oldal: number) => {
-    if (oldal < 1){return ;}
+    if (oldal < 0){return ;}
 
-    
 
 
     /*
@@ -158,8 +155,8 @@ export const listOrder_Site = async (oldal: number) => {
         .endAt(1000000)
         .get();
   */
-   //const data = (await firestore().collection("queue").orderBy("order_id","asc").startAfter((( oldal - 1 ) * ITEMS_PER_PAGE)).endAt((oldal * ITEMS_PER_PAGE) + 1).get()).docs
-   const data = (await firestore().collection("queue").orderBy("order_id","asc").get()).docs.slice(ITEMS_PER_PAGE - 1 * oldal, ITEMS_PER_PAGE * oldal + 1)
+
+   const data = (await firestore().collection("queue").orderBy("order_id","asc").get()).docs.slice(oldal * ITEMS_PER_PAGE, (oldal + 1) * ITEMS_PER_PAGE)
     console.log(data)
     
 

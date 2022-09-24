@@ -30,7 +30,7 @@ function ClientOrder(props:any) : JSX.Element
             text:"TÖRLÉS",
             onPress: async () => {
                 try{
-                    (await firestore().collection("queue").where("order_id", "==", order_id).get()).docs[0].ref.delete()
+                    (await firestore().collection("deleted_orders").where("order_id", "==", order_id).get()).docs[0].ref.delete()
 
                 }catch(err)
                 {

@@ -22,33 +22,41 @@ export default function SearchEngine(props:any)
                 setSearch(text)
                 props.updateSearch(text)
             }
-        }}/></View>
+        }}/>
+        <Image style = {style.image} source = {require("../../assets/search_vector.png")} />
+        </View>
         
     )
 }
 
 const style = StyleSheet.create(
-    {   border:{
-        backgroundColor:"#fff",
-        alignItems:'center',
-        height:'35%',
-        borderRadius:15
+    {  
+        border:{
+        borderColor:"#ddd",
+        borderWidth:5,
+        borderRadius:5,
+        width:"100%",
+        height:"100%"
     },
         searchbar:
         {
             backgroundColor:"#e8a5a5",
-            width:"95%",
             color: "#fff",
             fontSize:20,
+            height:"100%",
+            width:"100%",
             borderColor:"#ddd",
-            borderRadius:10,
-            
-            marginTop:8,
-            height:"80%",
             textAlign:"center",
             fontFamily:"JetBrains-Mono"
             
             
+        },
+        image:{
+            width:30,
+            height:30,
+            top:"-80%",
+            left:"2%"
         }
     }
+    
 )

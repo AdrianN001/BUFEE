@@ -16,7 +16,7 @@ function ClerkOrder(props:any)
    
     const [page, setPage] = useState<number>(0);
 
-    const rendeles_menny = useRef<number>(1);
+    const rendeles_menny = useRef<number>(0);
 
     const [osszes_oldal, setOldal] = useState<number>(0);
 
@@ -33,7 +33,6 @@ function ClerkOrder(props:any)
         () =>{
            (async () => {
             const data = await listOrder_Site(0)
-            console.log(data)
             setOldal( Math.ceil((await listOrders()).length / ITEMS_PER_PAGE) )
             
             setOrder(data);
@@ -117,15 +116,14 @@ function ClerkOrder(props:any)
         isClerk = {true}
 
         greater_than = {() => {
-            console.log("ASD %i \n ASD2 %i", page, osszes_oldal)
-            if (page === osszes_oldal ){
-                console.log("ASD")
+            if (page + 1 === osszes_oldal ){
                 return Alert.alert("ELÉRTÉL AZ UTOLSÓ OLDALIG")
                 
             }
-            setPage(page + 1 );
+            
             (async () => {
-                const data = await listOrder_Site(page)
+                const data = await listOrder_Site(page + 1)
+                setPage(page + 1 );
                 
                 setOrder(data);
                 
@@ -134,16 +132,16 @@ function ClerkOrder(props:any)
             }
         }
         less_than = {() => {
-            if (page < 2) { return; }
+            if (page -1 <= -1){return ;}
             
-            
-            setPage(page - 1);
             (async () => {
                 
 
                 
                 try{
-                    const data = await listOrder_Site(page)
+
+                    const data = await listOrder_Site(page - 1)
+                    setPage(page - 1);
                     setOrder(data);
                     
                 }
@@ -156,7 +154,7 @@ function ClerkOrder(props:any)
             }
         }
 
-        button_1_function = {async () => setOrder(await listOrder_Site(page))}
+        button_1_function = {async () => setOrder(await listOrder_Site(0))}
         button_2_function = {props.button_function}/>
     </View>
     </View>)

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView, Animated, TouchableHighlight, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView, Animated, TouchableHighlight, TouchableOpacity, TouchableWithoutFeedback} from 'react-native';
 import { useFonts } from '@expo-google-fonts/dev';
 import React, { useEffect, useRef } from 'react';
 
@@ -51,20 +51,20 @@ function Overlay(props: any)
             <TouchableHighlight onPressIn={props.button_1_function}>
                 <Image source = {!isClerk ? require("../../assets/history_button.png") : require("../../assets/refresh_button.png")} style = {style.history}/>
             </TouchableHighlight>
-            {!isClerk ? <TouchableHighlight onPressIn={props.button_3_function }>
+            {!isClerk ? <TouchableWithoutFeedback onPressIn={props.button_3_function }>
                 <Text style = {{...style.text, backgroundColor:"rgba(0,0,0,0)"}} >
                     BUFEE
                     
                </Text>
-            </TouchableHighlight>
+            </TouchableWithoutFeedback>
                     : <View style = {style.images}>
-                    <TouchableOpacity onLongPress={props.less_than}>
+                    <TouchableOpacity onLongPress={props.less_than} style = {{position:'absolute', left:13, top:10, width:"36%", height:83}}>
                         <Image source = {require("../../assets/less-than.png")} 
-                        style = {{position:'absolute', right:15, top:5, width:"40%", height:90}}/>
+                        />
                     </TouchableOpacity>
-                    <TouchableOpacity onLongPress={props.greater_than}>
-                        <Image source = {require("../../assets/greater-than.png")} 
-                        style = {{position:'absolute',left:15, top:5, width:"40%", height:90}}/>
+                    <TouchableOpacity onLongPress={props.greater_than} 
+                        style = {{position:'absolute',right:13, top:10, width:"36%", height:83}}>
+                        <Image source = {require("../../assets/greater-than.png")} />
                     </TouchableOpacity>
                     </View>}
             

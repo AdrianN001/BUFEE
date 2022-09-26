@@ -33,12 +33,14 @@ export default async function addOrder(om_id: string, bucket: FoodInterface[], _
      Firestoreba kikuld egy uj documentet, ami 3 dolgot tartalmaz
     */
 
-    const current_orders = (await firestore().collection("queue").get()).docs.filter(adat => adat.data()["payload"].startsWith(om_id)).length
-    console.log("Jelenleg ennyi rendelesed van: %i", current_orders)
 
     const data_payload = generate_payload(bucket, _isPayed)
 
-    const last_index = parseInt(await (await firestore().collection("queue").orderBy("order_id", "desc").limit(1).get()).docs[0].data().order_id) ?? 0;
+    let last_index: number = 0
+    try{
+        last_index = parseInt(await (await firestore().collection("queue").orderBy("order_id", "desc").limit(1).get()).docs[0].data().order_id)
+
+    }catch(err){}
     
     const current_index = last_index + 1
 
@@ -142,7 +144,7 @@ export async function list_finished_orders()
 }
 
 
-export const ITEMS_PER_PAGE = 4 // ami gyakorlatilag 3 
+export const ITEMS_PER_PAGE = 3 // ami gyakorlatilag 3 
 
 export const listOrder_Site = async (oldal: number) => {
     if (oldal < 0){return ;}
@@ -157,14 +159,14 @@ export const listOrder_Site = async (oldal: number) => {
   */
 
    const data = (await firestore().collection("queue").orderBy("order_id","asc").get()).docs.slice(oldal * ITEMS_PER_PAGE, (oldal + 1) * ITEMS_PER_PAGE)
-    console.log(data)
-    
+    console.log("OLDAL %i", oldal )
+    console.log("ADAT MENNYISEG %i", data.length)
 
     
 
     let _order_list: Promise <Order_Model[]> = Promise.all( data.map(async (order)=>{
         
-                                                        const {order_id, payload, timeCreated} = order["data"]();
+                                                        const {order_id, payload, timeCreated} = order.data();
                                                         
                                                         const [order_list, price, isPayed_string] = payload.split("<>")
                                                         const isPayed: boolean = isPayed_string === "true" ? true : false

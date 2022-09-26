@@ -17,7 +17,8 @@ export default function App() {
   const [globalOMID, setglobalOMID] = useState<string>("")
 
   console.log(loged_in)
-  console.log(globalOMID)
+  
+  console.log(globalOMID )
 
 
   return ( 
@@ -28,7 +29,7 @@ export default function App() {
           setLogedIn(can_login);
           setglobalOMID(om_id)
         }}/>
-              : globalOMID !== "pagisz_admin_bufee"
+              : globalOMID !== "pagisz_bufe"
                 ? <Food_page om_id = {globalOMID} setLogout ={(elem: boolean) => setLogedIn(elem)}/>  
                 : <Clerk/>
   

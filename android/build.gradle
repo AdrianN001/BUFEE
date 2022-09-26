@@ -8,6 +8,7 @@ buildscript {
         minSdkVersion = Integer.parseInt(findProperty('android.minSdkVersion') ?: '21')
         compileSdkVersion = Integer.parseInt(findProperty('android.compileSdkVersion') ?: '31')
         targetSdkVersion = Integer.parseInt(findProperty('android.targetSdkVersion') ?: '31')
+        
         if (findProperty('android.kotlinVersion')) {
             kotlinVersion = findProperty('android.kotlinVersion')
         }
@@ -30,6 +31,7 @@ buildscript {
         classpath('com.facebook.react:react-native-gradle-plugin')
         classpath('de.undercouch:gradle-download-task:5.0.1')
         classpath('com.google.gms:google-services:4.3.13')
+
        
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

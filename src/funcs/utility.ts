@@ -17,4 +17,18 @@ function li_with_amount(lista: string[]) : string[]
     return new_list;
 }
 
-export {li_with_amount}
+const format_class = (class_:string): string => {
+    
+    try{
+        const szak = class_[class_.length - 1];
+        const evfolyam = class_[0] === "9" ?  class_[0] : class_.slice(0,2)
+
+        return (`${evfolyam}. ${szak}`)
+    }catch(err)
+    {
+        return "..."
+    }
+}
+    
+
+export {li_with_amount, format_class}

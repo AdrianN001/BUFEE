@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView, Alert, TouchableHighlight, TouchableOpacity, LayoutChangeEvent} from 'react-native';
 import { useState, Children, useRef, useEffect, createRef } from 'react';
-import { useFonts } from 'expo-font';
 import Food, {FoodInterface} from './food';
 import Overlay from './Overlay';
 import CartButton from './cart-button';
@@ -10,7 +9,6 @@ import Profile from './profile';
 import React from 'react';
 import ClientOrders from './ClientOrders';
 import Paying from './paying';
-import { get_data } from '../funcs/firestore';
 
 const FOODS: FoodInterface[] = Array.from(require("../../assets/FOODS.json"))
 
@@ -77,46 +75,26 @@ function Food_page(props: any)
 
 
 
+                <View style = {{ height: "85%", top:"12%"}}>
+                    <ScrollView  
+                        onScroll = {e => {setPositon( e.nativeEvent.contentOffset.y )}}  >
 
-                <ScrollView  
-                    onScroll = {e => {setPositon( e.nativeEvent.contentOffset.y )}}  >
 
 
+                                <View style = {style.container} onLayout = {(evt:any) => console.log(evt.nativeEvent.layout)}>
 
-                            <View style = {style.container} onLayout = {(evt:any) => console.log(evt.nativeEvent.layout)}>
+                                            {
+                                            FOODS.map(({id, nev, price, image}) =>{
+                                                food_count.current = FOODS.filter(etel => new RegExp(filter).test(etel.nev)).length
+                                                
 
-                                        {
-                                        FOODS.map(({id, nev, price, image}) =>{
-                                            food_count.current = FOODS.filter(etel => new RegExp(filter).test(etel.nev)).length
-                                            
-
-                                                if (new RegExp(filter).test(nev))
-                                                {  
-                                                    
-                                                    return (<TouchableOpacity
-                                                            key = {id}
-                                                            onLongPress={
-                                                                () => {
-                                                                    const bucket_1 = bucket ?? []
-
-                                                                    if (bucket_1.length >= 4)
-                                                                    {
-                                                                        Alert.alert("HIBA", "Legfeljebb 4 dolgot rendelhetsz egyszerre")
-                                                                        return;
-                                                                    }
-
-                                                                    const buy_id = bucket_1.length
-                                                                    setBucket([...bucket_1 , {id, nev, price, image, buy_id}])}
-                                                            }
-                                                            style = {{height: 150}}>
-                                                                    <Food key = {id}
-                                                                
-                                                                    image ={require("../../assets/icon.png")} 
-                                                                    name = {nev} 
-                                                                    
-                                                                    getHeight = {(magassag: number) => setFoodHeight(!magassag ? Math.min(magassag, food_height): magassag)}
-                                                                    price = {`${price} Ft`} 
-                                                                    button_function = {() => {
+                                                    if (new RegExp(filter).test(nev))
+                                                    {  
+                                                        
+                                                        return (<TouchableOpacity
+                                                                key = {id}
+                                                                onLongPress={
+                                                                    () => {
                                                                         const bucket_1 = bucket ?? []
 
                                                                         if (bucket_1.length >= 4)
@@ -127,26 +105,45 @@ function Food_page(props: any)
 
                                                                         const buy_id = bucket_1.length
                                                                         setBucket([...bucket_1 , {id, nev, price, image, buy_id}])}
-                                                                }  />
-                                                    </TouchableOpacity>)
-                                                }
+                                                                }
+                                                                style = {{height: 150}}>
+                                                                        <Food key = {id}
+                                                                    
+                                                                        image ={require("../../assets/icon.png")} 
+                                                                        name = {nev} 
+                                                                        
+                                                                        getHeight = {(magassag: number) => setFoodHeight(!magassag ? Math.min(magassag, food_height): magassag)}
+                                                                        price = {`${price} Ft`} 
+                                                                        button_function = {() => {
+                                                                            const bucket_1 = bucket ?? []
+
+                                                                            if (bucket_1.length >= 4)
+                                                                            {
+                                                                                Alert.alert("HIBA", "Legfeljebb 4 dolgot rendelhetsz egyszerre")
+                                                                                return;
+                                                                            }
+
+                                                                            const buy_id = bucket_1.length
+                                                                            setBucket([...bucket_1 , {id, nev, price, image, buy_id}])}
+                                                                    }  />
+                                                        </TouchableOpacity>)
+                                                    }
 
 
 
-                                                })
-                                    }
+                                                    })
+                                        }
 
 
-                            </View>
+                                </View>
 
-                </ScrollView>
+                    </ScrollView>
+                </View>
 
-                {searching && <View style = {style.searchengine}>
-
+                <View style = {style.searchengine}>
 
                     <SearchEngine updateSearch = {(text: string) => setFilter(text)} />
-                    <View style = {style.searchengine_overlay}/>
-                </View>}
+                </View>
 
 
                 {
@@ -175,9 +172,6 @@ function Food_page(props: any)
                 {profile && <Profile style = {{ backgroundColor: "#000" }} omid = {om_id} setLogout = {() => props.setLogout(false)} setButton = {() => setProfile(false)}/>}
                 {history && <ClientOrders style = {{ backgroundColor: "#000" }} omid = {om_id} setButton = {() => setHistory(false)}/>}
                 {paying && <Paying omid = {om_id} updateBucket = {(bucket: FoodInterface[]) => setBucket(bucket)} bucket = {bucket} back_button = {() => setPaying(false)}/>}
-
-
-
 
 
 
@@ -241,21 +235,14 @@ const style = StyleSheet.create({
     searchengine:
     {
         position:'absolute',
-        top:"20%",
+        top:"3%",
         alignSelf:'center',
         width:"70%",
-        height:"30%",
+        height:"8%",
         borderColor:"#f5c4c4"
 
     },
-    searchengine_overlay:
-    {
-        backgroundColor:"rbga(232, 165, 165,0.8)",
-
-        height:"80%",
-        width:"100%"
-
-    }
+    
 
 
 

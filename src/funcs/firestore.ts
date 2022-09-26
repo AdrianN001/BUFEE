@@ -1,4 +1,5 @@
 import firestore, { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
+import { text } from "stream/consumers";
 
 // async function main() {
 //     const resp = await firestore().collection("users").doc("H5qLxIMMZqsC1YqNEjuj").get()
@@ -48,14 +49,10 @@ interface Order_Model{
 
 async function add_User(om_id: string,password: string,name: string,class_: string): Promise< REGISTER_RESPONSE >{
 
-    const OMID_Regex: RegExp = /^72(.{9})$/; 
     const CLASS_REGEX: RegExp = /^(9|(10)|(11)|(12)|(13))( |\.|\. |)([A-Ea-e])$/
 
-    if(!OMID_Regex.test(om_id))
-    {
-        return REGISTER_RESPONSE.INVALID_OMID
-    }
-    else if(await (await firestore().collection("users").where("om_id", "==", om_id).get()).docs.length !== 0)
+    
+    if( (await firestore().collection("users").where("om_id", "==", om_id).get()).docs.length !== 0)
     {
         return REGISTER_RESPONSE.ALREADY_REGISTERED;
     }

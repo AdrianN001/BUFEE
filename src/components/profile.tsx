@@ -3,6 +3,7 @@ import { useFonts } from "expo-font";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView, Alert, TouchableOpacity, TouchableHighlight} from 'react-native';
 import { get_data, get_password } from "../funcs/firestore";
+import {format_class} from "../funcs/utility"
 
 
 export default function Profile(props:any)
@@ -37,7 +38,7 @@ export default function Profile(props:any)
             <Text style = {{...style.data, position:'absolute', top:"35%",alignSelf:'center'}}>{data?.name ?? "..."}</Text>
 
             <Text style = {{...style.data, position:'absolute', top:"55%",alignSelf:'center'}}>Osztály</Text>
-            <Text style = {{...style.data, position:'absolute', top:"65%",alignSelf:'center'}}>{data?.class_ ?? "..."}</Text>
+            <Text style = {{...style.data, position:'absolute', top:"65%",alignSelf:'center'}}>{format_class(data?.class_) ?? "..."}</Text>
 
             <TouchableOpacity onPress={props.setButton} style = {style.back}><Image source={ require("../../assets/back_button.png")}/></TouchableOpacity>
             <TouchableOpacity onPress={props.setLogout} style = {style.logout}><Image source={ require("../../assets/logout_button.png")}/></TouchableOpacity>

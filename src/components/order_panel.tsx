@@ -54,6 +54,7 @@ const style = StyleSheet.create(
         },list:
         {
             textAlign:'center', 
+            fontSize:13,
             alignSelf:"flex-start",
             marginTop:20,
             marginLeft:30,

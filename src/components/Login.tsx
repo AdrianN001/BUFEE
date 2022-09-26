@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button, KeyboardAvoidingView, Pressable, Animated, Touchable, TouchableWithoutFeedback, Alert} from 'react-native';
+import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button, KeyboardAvoidingView, Pressable, Animated, Touchable, TouchableWithoutFeedback, Alert, AsyncStorage} from 'react-native';
 import { useState, useEffect, useRef } from 'react';
 import { useFonts } from 'expo-font';
 import Register_Page from './register';
@@ -36,24 +36,19 @@ const button_function = async(om_id: string, password: string) =>
 }
 
 
+const get_prev_log = async(): Promise< string | null >  => {
+ 
+  const prev = await AsyncStorage.getItem("last_login") ?? await AsyncStorage.getItem("registered_user")
+
+  return prev 
+}
+
 export default function Login(props: any) {
 
   let [om_id, setOMID] = useState("")
   let [password, setPassword] = useState("")
   let [register, setRegister] = useState(false)
 
-  
-
-
-  const translation = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    Animated.timing(translation,
-      {
-        toValue: 10,
-        useNativeDriver:true
-      }).start();
-  })
   
   let [fontsLoad] = useFonts(
     {
@@ -62,6 +57,14 @@ export default function Login(props: any) {
       'Glory': require("../../assets/fonts/Glory.ttf")
     }
   )
+
+  useEffect(() => {
+
+    (async() => {
+      setOMID(await get_prev_log() ?? "")
+    })()
+
+  }, [])
 
   if (!fontsLoad){
     return <AppLoading />;
@@ -75,50 +78,46 @@ export default function Login(props: any) {
     <View style={styles.container} >
       
 
-      
-        <Image style = { bufee_logo_style.burger} source={require("../../assets/bufee_logo.png")}/>
+      { !register ?
+      <>
+          <Image style = { bufee_logo_style.burger} source={require("../../assets/bufee_logo.png")}/>
 
-        <Text style = {bufee_logo_style.text}>BUFEE</Text>
+          <Text style = {bufee_logo_style.text}>BUFEE</Text>
 
-        <View style = {input_styles.padding} >
-          <TextInput value = {om_id} onChangeText= {text => setOMID(text)} style = {input_styles.om_id} placeholder = "OM Azonositó"/>
+          <View style = {input_styles.padding} >
+            <TextInput value = {om_id}  onChangeText= {text => setOMID(text)} style = {input_styles.om_id} placeholder = "Felhasználó Név"/>
 
-          <TextInput  value = {password} secureTextEntry = {true} onChangeText= {text => setPassword(text)} style = {input_styles.password} placeholder='Jelszó'/> 
+            <TextInput  value = {password} secureTextEntry = {true} onChangeText= {text => setPassword(text)} style = {input_styles.password} placeholder='Jelszó'/> 
 
-          <View style = {input_styles.button} >
-            <Button title = 'Bejelentkezés' color= "#E17676" onPress={async () =>{
-                      const can_login = await button_function(om_id,password);
-                      if (!can_login) return;
-                      else {
-                        props.onLogin({can_login, om_id})
+            <View style = {input_styles.button} >
+              <Button title = 'Bejelentkezés' color= "#E17676" onPress={async () =>{
+                        const can_login = await button_function(om_id,password);
+                        if (!can_login) return;
+                        else {
+                          props.onLogin({can_login, om_id})
+                          AsyncStorage.setItem("last_login", om_id)
+                          
+                        }
                         
-                      }
-                      
-              }}/>
+                }}/>
+            </View>
           </View>
-        </View>
 
 
 
-        <View style = {input_styles.register}>
-          <Pressable onPress={() => setRegister(true)}><Text >Nincs még Fiókod?</Text></Pressable>
-        </View>
-
-        {register && 
-        
-          <Animated.View style = {{
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0,0,0,0.8)",
-            transform: [{translateY:translation}]
+          <View style = {input_styles.register}>
+            <Pressable onPress={() => setRegister(true)}><Text >Nincs még Fiókod?</Text></Pressable>
+          </View>
+        </>
+            :
+          
+          <View style = {style.register}>
             
-          }}>
+              <TouchableWithoutFeedback onPress={()=>setRegister(false)}><Image source = {require("../../assets/exit_button.png")} style = {{top: "-10%",right: "10%", width: 25, height: 25, zIndex:2}}></Image></TouchableWithoutFeedback>
+              <Register_Page button_function = {() => setRegister(false)}/>
             
-              <TouchableWithoutFeedback onPress={()=>setRegister(false)}><Image source = {require("../../assets/exit_button.png")} style = {{position:'absolute',top:"25%",right:"20%", width: 25, height: 25, zIndex:2}}></Image></TouchableWithoutFeedback>
-              <Register_Page/>
-            
-          </Animated.View>
-        
+          </View>
+         
         
         }
 
@@ -151,7 +150,7 @@ const bufee_logo_style = StyleSheet.create(
       width: 240,
       height: 240,
       position: 'absolute', 
-      top: "5%",
+      top: "-5%",
 
       shadowColor: "#fff",
       shadowOffset: {
@@ -170,18 +169,16 @@ const bufee_logo_style = StyleSheet.create(
       fontFamily : "Glory",
       color: "#E17676",
       fontSize: 40, 
-      position: 'absolute',
-      top: "35%"
+      top: "-5%"
     }
   }
 )
 const input_styles = StyleSheet.create(
   {
     padding: {
-      position: 'absolute',
-      top: "50%",
+      top: "-2%",
       width: "60%",
-      height: "30%",
+      height: "35%",
       backgroundColor: "#262626",
       borderRadius: 50,
 
@@ -204,9 +201,8 @@ const input_styles = StyleSheet.create(
      
       fontFamily:'BubblerOne_400Regular',
       
+      top: "10%",
 
-      marginLeft: 1,
-      marginTop: 25,
       height: 40,
       width: 190,
       backgroundColor: "#8B8B8B",
@@ -217,8 +213,7 @@ const input_styles = StyleSheet.create(
     password: {
       fontFamily:'BubblerOne_400Regular',
       
-      marginLeft: 1,
-      marginTop: 20,
+      top: "20%",
       height: 40,
       width: 190,
 
@@ -228,17 +223,33 @@ const input_styles = StyleSheet.create(
       textAlign:"center"
     },
     button: {
-      marginTop: 30,
       
-      borderRadius: 20
+      top:"35%"
+      
+      
       
     },
     register:
     {
       position:"absolute",
       color:'#000',
-      bottom: "15%"
+      bottom: "27%"
     }
     
   }
 )
+
+const style = StyleSheet.create({
+  register:{
+    top:"-2%",
+    height:"70%",
+    width:"60%",
+    
+  },
+  register_Background:
+  {
+    height:"100%",
+    width:"100%",
+
+  }
+})

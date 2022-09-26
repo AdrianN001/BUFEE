@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView, Animated, TouchableHighlight, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView, Animated, TouchableHighlight, TouchableOpacity, Alert} from 'react-native';
 import { useFonts } from '@expo-google-fonts/dev';
 import React, { useEffect, useRef, useState } from 'react';
 import ClerkOrder from './clerk_order';
@@ -29,7 +29,7 @@ export default function Clerk(props: any)
                                 
 
                                 <View style = {style.message} >
-                                    <TouchableOpacity><Image source = {require("../../assets/message_clerk.png")} /></TouchableOpacity>
+                                    <TouchableOpacity onPress={() => Alert.alert("EZ A FUNKCIÓ MÉG FEJLESZTÉS ALATT ÁLL.", "Késöbbi verziókban elérhetővé fog válni.")}><Image source = {require("../../assets/message_clerk.png")} /></TouchableOpacity>
                                 </View>
 
                                 <View style = {style.finished} >

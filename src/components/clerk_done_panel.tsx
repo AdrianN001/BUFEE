@@ -26,9 +26,9 @@ function Finished_Order(props:any) : JSX.Element
             
             
         </TouchableOpacity>
-        <TouchableWithoutFeedback onPress={props.paymentDone}>
-            <Image source = {require("../../assets/atvetel_gomb.png")} style = {style.button}/>
-        </TouchableWithoutFeedback>
+        <TouchableOpacity onPress={props.paymentDone} style = {style.button}>
+            <Image source = {require("../../assets/atvetel_gomb.png")} />
+        </TouchableOpacity>
     </View>)
 
 }

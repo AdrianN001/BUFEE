@@ -41,7 +41,12 @@ function ClientOrder(props:any) : JSX.Element
         }])}
     }else if (isDone && !isDeleted){
         image_used = require("../../assets/state_done.png")
-        state = "done"
+        state = "done";           //7.50, 8.45, 9.40, 10.40, 11.35, 12.30, 13.25, 14.15
+        
+        const szunetek_string: string[] = [7.50, 8.45, 9.40, 10.40, 11.35, 12.30, 13.25, 14.15].map(elem => elem.toString())
+        const szunetek: number[] = [7.83, 8.75, 9.67, 10.67, 11.58, 12.5, 13.41, 14.25]
+
+        button_function = () => {return Alert.alert("A rendelés elkészült! ", "A Rendelésed a következő időpontban tudod átvenni", )}
     }else{
         image_used = require("../../assets/state_working.png")
         state = "working"

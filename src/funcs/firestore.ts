@@ -1,5 +1,4 @@
 import firestore, { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
-import { text } from "stream/consumers";
 
 // async function main() {
 //     const resp = await firestore().collection("users").doc("H5qLxIMMZqsC1YqNEjuj").get()
@@ -23,6 +22,8 @@ interface User_Model{
 
     password:string,
     class_: string,
+
+    favorites: number[]
     
     
 }
@@ -61,8 +62,8 @@ async function add_User(om_id: string,password: string,name: string,class_: stri
         return REGISTER_RESPONSE.INVALID_CLASS
     }
     else{
-        
-        firestore().collection("users").add({om_id, password,name,class_}).then(() => console.log('User Added'))
+        const fav: number[] = []
+        firestore().collection("users").add(({ om_id, password, name, class_, favorites: fav } as User_Model)).then(() => console.log('User Added'))
         return REGISTER_RESPONSE.OK;
 
     }
@@ -89,6 +90,29 @@ async function get_data(om_id: string): Promise< User_Model >{
     
 }
 
+async function update_liked(current_state: boolean, om_id: string, food_id: number) : Promise < void > {
+    const current: number[] = (await firestore().collection("users").where("om_id", "==", om_id).get()).docs[0].data().favorites ?? [];
+
+    if (!current_state && !current.includes(food_id)){
+
+        (await firestore().collection("users").where("om_id", "==", om_id).get()).docs[0].ref.update({
+            favorites : [...current,food_id]
+        })
+    }else {
+        (await firestore().collection("users").where("om_id", "==", om_id).get()).docs[0].ref.update({
+            favorites : current.filter(adat => adat !== food_id)
+        })
+    }
+    
+}
+
+async function get_liked(om_id: string) : Promise < number[] > {
+    const current: number[] = (await firestore().collection("users").where("om_id", "==", om_id).get()).docs[0].data()['favorites'] ?? [];
+
+    return  current
+}
 
 
-export {Order_Model, add_User, REGISTER_RESPONSE, get_password, get_data, User_Model}
+
+
+export {get_liked, update_liked,Order_Model, add_User, REGISTER_RESPONSE, get_password, get_data, User_Model}

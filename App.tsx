@@ -4,7 +4,8 @@ import Profile from './src/components/profile';
 import Clerk from './src/components/clerk_page';
 
 
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { get_liked } from './src/funcs/firestore';
 
 interface LOGIN_PAYLOAD
 {
@@ -19,6 +20,8 @@ export default function App() {
   console.log(loged_in)
   
   console.log(globalOMID )
+
+  
 
 
   return ( 

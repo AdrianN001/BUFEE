@@ -1,10 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable} from 'react-native';
-import { useState } from 'react';
+import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, AsyncStorage} from 'react-native';
+import { useEffect, useState } from 'react';
 import { useFonts } from 'expo-font';
 import { Glory_100Thin } from '@expo-google-fonts/dev';
 import AppLoading from 'expo-app-loading';
 import React from 'react';
+import firestore, { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
+
+
+import { update_liked, get_liked } from '../funcs/firestore';
 
 
 export interface FoodInterface{
@@ -17,22 +21,41 @@ export interface FoodInterface{
     callback?: () => void
 }
 
+const add_item = async (key: number, om_id: string): Promise < void >  => {
+    
+    const current_favorites: number[] = await (await firestore().collection("users").where("om_id", "==",om_id).get()).docs[0].data()["favorites"];
+    console.log("ASDSASDASD");
+
+    (await firestore().collection("users").where("om_id", "==", om_id).get()).docs[0].ref.update({
+        favorites: Array.from(new Set([...current_favorites,key]))
+    })
+}
+
+const remove_item = async (key: number, om_id: string): Promise < void >  => {
+    const current_favorites: number[] = await (await firestore().collection("users").where("om_id", "==",om_id).get()).docs[0].data()["favorites"];
+    
+    (await firestore().collection("users").where("om_id", "==", om_id).get()).docs[0].ref.update({
+        favorites: Array.from(new Set(current_favorites.filter(elem => elem !== key)))
+    })
+}
+
 
 function Food(props: any): JSX.Element{  //props-nak nem lehet Interface-t megadni, mivel a babel nem kedvelne i guess
-    const {image, name, price, id, callback} = props
+    const {image, name, price, id, favorites} = props;
+
+                                // props.isLiked.then((data: boolean) => setFav(data))
+    const [isFav, setFav] = useState<boolean>( props.isLiked );
+
+    console.log(favorites.current)
+    
+    
 
 
-
-    const [loaded] = useFonts({
+    useFonts({
         'Glory' : require("../../assets/fonts/Glory.ttf"),
         'JetBrains-Mono': require("../../assets/fonts/JetBrainsMono.ttf")
         })
-    if (!loaded)
-    {
-        
-        return <AppLoading/>
-          
-    }
+   
 
     return (<View style = {style.container} onLayout = {(evt:any) => {props.getHeight(evt.nativeEvent.layout.height)}}>
                 {false && <View style = {{width:90}}><Image source = {image ?? require("../../assets/icon.png")} style = {style.image} /></View>}
@@ -45,8 +68,18 @@ function Food(props: any): JSX.Element{  //props-nak nem lehet Interface-t megad
 
                     <Text style = {style.price}>{price ?? "%Price%"}</Text>
 
+                    <Pressable onPress={() => { props.hearth_function(isFav); 
+                                                console.log(isFav ? "Torolve" : "Hozzaadva")
 
+                                                !isFav  ? add_item(  Number(props.id), props.om_id  )
+                                                        : remove_item(  Number(props.id), props.om_id  )
+
+                                                setFav(!isFav);
+                                                 }} style = {{width:50, position:'absolute', left:'4%', top:'40%'}}>
+                        <Image source = {isFav ? require("../../assets/red_heart.png") : require("../../assets/white_heart.png")} style = {style.heart}/>
+                    </Pressable>
                 </View>
+                
                 <Pressable  onPress={props.button_function}><View><Image style = {style.tocart} source ={ require("../../assets/to-cart.png")}/></View></Pressable>
             </View>)
 }
@@ -131,6 +164,11 @@ const style = StyleSheet.create(
             shadowRadius: 2.62,
 
             elevation: 4,
+        },
+        heart:{
+            width:40,
+            height:40,
+            alignSelf:'center',
         }
     }
 )

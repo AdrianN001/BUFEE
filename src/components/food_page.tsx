@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView, Alert, TouchableHighlight, TouchableOpacity, LayoutChangeEvent} from 'react-native';
+import { StyleSheet, Text, View, Image, SafeAreaView, TextInput,  Button ,Pressable, ScrollView, Alert, TouchableHighlight, TouchableOpacity, LayoutChangeEvent, AsyncStorage} from 'react-native';
 import { useState, Children, useRef, useEffect, createRef } from 'react';
 import Food, {FoodInterface} from './food';
 import Overlay from './Overlay';
@@ -9,18 +9,20 @@ import Profile from './profile';
 import React from 'react';
 import ClientOrders from './ClientOrders';
 import Paying from './paying';
+import { Swipeable } from 'react-native-gesture-handler';
+import { update_liked, get_liked } from '../funcs/firestore';
+import firestore, { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
+
 
 const FOODS: FoodInterface[] = Array.from(require("../../assets/FOODS.json"))
 
+const search_conditional = (input1: string, input_2: string) => new RegExp(input1).test(input_2)
 
 function Food_page(props: any)
 {
     const [food_height, setFoodHeight] = useState<number>(0);
     
     const [offset, setOffset] = useState<number>(0);
-    const [opacity_1, setOpacity] = useState<number>(1);
-
-    //let overlay_ref = useRef<any>();
 
     const [position, setPositon] = useState<number>(0);
 
@@ -34,7 +36,9 @@ function Food_page(props: any)
 
     const [history,setHistory] = useState<boolean>(false);
     const [profile, setProfile] = useState<boolean>(false);
+
     const [searching, setSearch] = useState<boolean>(false);
+    const [loved, setLoved] = useState<boolean>(false);
 
     const [filter, setFilter] = useState<string>("");
 
@@ -42,6 +46,10 @@ function Food_page(props: any)
     const [paying, setPaying] = useState<boolean>(false);
 
     const om_id: string = props.om_id;
+
+    const favs = useRef<number[]>([])
+
+    const [isLoaded, setLoaded] = useState<boolean>(false)
 
     useEffect(() => {
 
@@ -68,30 +76,56 @@ function Food_page(props: any)
 
     },[position])
 
+    useEffect(() =>{
+        setTimeout(() => firestore().collection("users").where("om_id", "==", om_id).get().then(adat => 
+            {
+                favs.current = adat.docs[0].data().favorites
+                setLoaded(true)
+            }),
+            1500)
+    },[])
+
+    useEffect(() =>{
+        firestore().collection("users").where("om_id", "==", om_id).get().then(adat => 
+            {
+                favs.current = adat.docs[0].data().favorites
+                setLoaded(true)
+            })
+            
+    },[loved])
+
+
+   
+
     return(
         < SafeAreaView style = {style.main} >
             <StatusBar style='auto'/>
 
 
 
-
-                <View style = {{ height: "85%", top:"12%"}}>
+            
+                <View style = {{ height: "88%", top:"12%"}}>
+                    
                     <ScrollView  
-                        onScroll = {e => {setPositon( e.nativeEvent.contentOffset.y )}}  >
+                        style = {{height:"100%"}} onScroll = {e => {setPositon( e.nativeEvent.contentOffset.y )}}  >
 
 
 
-                                <View style = {style.container} onLayout = {(evt:any) => console.log(evt.nativeEvent.layout)}>
+                                <View style = {style.container} >
 
                                             {
-                                            FOODS.map(({id, nev, price, image}) =>{
+                                            isLoaded ? FOODS.map(({id, nev, price, image}) =>{
                                                 food_count.current = FOODS.filter(etel => new RegExp(filter).test(etel.nev)).length
-                                                
 
-                                                    if (new RegExp(filter).test(nev))
+                                                    if (!loved ? search_conditional(filter,nev) : favs.current.includes(id))
                                                     {  
                                                         
-                                                        return (<TouchableOpacity
+                                                        return (
+                                                            
+                                                        
+
+                                                        
+                                                        <TouchableOpacity
                                                                 key = {id}
                                                                 onLongPress={
                                                                     () => {
@@ -108,8 +142,15 @@ function Food_page(props: any)
                                                                 }
                                                                 style = {{height: 150}}>
                                                                         <Food key = {id}
-                                                                    
-                                                                        image ={require("../../assets/icon.png")} 
+
+                                                                        id = {id}
+                                                                        favorites = {favs}
+
+                                                                        om_id = {om_id}
+
+                                                                        isLiked = { favs.current.includes(id) }
+                                                                        hearth_function = {() => console.log("Gomb megnyomva itt: %i", id)}
+
                                                                         name = {nev} 
                                                                         
                                                                         getHeight = {(magassag: number) => setFoodHeight(!magassag ? Math.min(magassag, food_height): magassag)}
@@ -132,6 +173,7 @@ function Food_page(props: any)
 
 
                                                     })
+                                            : <Text>TOLTES</Text>
                                         }
 
 
@@ -139,9 +181,13 @@ function Food_page(props: any)
 
                     </ScrollView>
                 </View>
+                
 
                 <View style = {style.searchengine}>
-
+                    <Pressable onPress={() => setLoved(!loved)} style = { {width: 60,height:60, left:'110%', bottom:"-100%"} }>
+                        <Image source = {loved ? require("../../assets/red_heart.png") : require("../../assets/white_heart.png")} 
+                         style = {{ width: "100%", height:"100%"}}/>
+                    </Pressable>
                     <SearchEngine updateSearch = {(text: string) => setFilter(text)} />
                 </View>
 
@@ -188,7 +234,7 @@ const style = StyleSheet.create({
     container: {
         showsVerticalScrollIndicator: true,
 
-        marginTop: "8%",
+        marginTop: "0%",
         marginBottom:"10%",
         marginLeft: 15,
         backgroundColor: "",
@@ -235,8 +281,9 @@ const style = StyleSheet.create({
     searchengine:
     {
         position:'absolute',
-        top:"3%",
+        top:"-3%",
         alignSelf:'center',
+        left:"3%",
         width:"70%",
         height:"8%",
         borderColor:"#f5c4c4"

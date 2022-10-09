@@ -176,7 +176,7 @@ const bufee_logo_style = StyleSheet.create(
 const input_styles = StyleSheet.create(
   {
     padding: {
-      top: "-2%",
+      top: "-3%",
       width: "60%",
       height: "35%",
       backgroundColor: "#262626",

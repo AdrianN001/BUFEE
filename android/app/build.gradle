@@ -158,6 +158,11 @@ def reactNativeArchitectures() {
 android {
     ndkVersion rootProject.ext.ndkVersion
 
+    dexOptions {
+	javaMaxHeapSize "3g"
+	}
+
+
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {

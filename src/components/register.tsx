@@ -105,7 +105,7 @@ function Register_Page(props:any)
         
   
         marginLeft: 1,
-        marginTop: 25,
+        marginTop: "20%",
         height: 40,
         width: 190,
         backgroundColor: "#8B8B8B",
@@ -125,7 +125,7 @@ function Register_Page(props:any)
         textAlign:"center"
       },
       button: {
-        marginTop: 30,
+        marginTop:30,
         
         borderRadius: 20,
         textAlign:"center"

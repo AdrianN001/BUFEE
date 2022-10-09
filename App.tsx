@@ -6,6 +6,7 @@ import Clerk from './src/components/clerk_page';
 
 import React, { useEffect, useRef, useState } from 'react';
 import { get_liked } from './src/funcs/firestore';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 interface LOGIN_PAYLOAD
 {
@@ -33,7 +34,7 @@ export default function App() {
           setglobalOMID(om_id)
         }}/>
               : globalOMID !== "pagisz_bufe"
-                ? <Food_page om_id = {globalOMID} setLogout ={(elem: boolean) => setLogedIn(elem)}/>  
+                ?<Food_page om_id = {globalOMID} setLogout ={(elem: boolean) => setLogedIn(elem)}/>
                 : <Clerk/>
   
   

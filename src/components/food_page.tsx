@@ -9,9 +9,10 @@ import Profile from './profile';
 import React from 'react';
 import ClientOrders from './ClientOrders';
 import Paying from './paying';
-import { Swipeable } from 'react-native-gesture-handler';
 import { update_liked, get_liked } from '../funcs/firestore';
 import firestore, { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
+
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 
 const FOODS: FoodInterface[] = Array.from(require("../../assets/FOODS.json"))
@@ -47,9 +48,9 @@ function Food_page(props: any)
 
     const om_id: string = props.om_id;
 
-    const favs = useRef<number[]>([])
+    const [favs, setFavs] = useState<number[]>([]);
 
-    const [isLoaded, setLoaded] = useState<boolean>(false)
+    const [refresh, setRefresh] = useState<boolean>(false);
 
     useEffect(() => {
 
@@ -76,20 +77,15 @@ function Food_page(props: any)
 
     },[position])
 
-    useEffect(() =>{
-        setTimeout(() => firestore().collection("users").where("om_id", "==", om_id).get().then(adat => 
-            {
-                favs.current = adat.docs[0].data().favorites
-                setLoaded(true)
-            }),
-            1500)
-    },[])
+    
 
     useEffect(() =>{
         firestore().collection("users").where("om_id", "==", om_id).get().then(adat => 
             {
-                favs.current = adat.docs[0].data().favorites
-                setLoaded(true)
+                const loved = adat.docs[0].data().favorites
+                console.log(loved)
+                
+                
             })
             
     },[loved])
@@ -110,14 +106,15 @@ function Food_page(props: any)
                         style = {{height:"100%"}} onScroll = {e => {setPositon( e.nativeEvent.contentOffset.y )}}  >
 
 
-
+                                
+                                
                                 <View style = {style.container} >
 
                                             {
-                                            isLoaded ? FOODS.map(({id, nev, price, image}) =>{
+                                             FOODS.map(({id, nev, price, image}) =>{
                                                 food_count.current = FOODS.filter(etel => new RegExp(filter).test(etel.nev)).length
 
-                                                    if (!loved ? search_conditional(filter,nev) : favs.current.includes(id))
+                                                    if (!loved ? search_conditional(filter,nev) : favs.includes(id))
                                                     {  
                                                         
                                                         return (
@@ -148,7 +145,7 @@ function Food_page(props: any)
 
                                                                         om_id = {om_id}
 
-                                                                        isLiked = { favs.current.includes(id) }
+                                                                        isLiked = { favs.includes(id) }
                                                                         hearth_function = {() => console.log("Gomb megnyomva itt: %i", id)}
 
                                                                         name = {nev} 
@@ -173,11 +170,12 @@ function Food_page(props: any)
 
 
                                                     })
-                                            : <Text>TOLTES</Text>
+                                           
                                         }
 
 
                                 </View>
+                               
 
                     </ScrollView>
                 </View>
@@ -202,12 +200,12 @@ function Food_page(props: any)
                 }
 
                 {
-                    offset < 110 && <View style = {{...style.overlay,transform: [{translateY: offset}]}}  >
+                    !paying && !history && !profile && offset < 110 && <View style = {{...style.overlay,transform: [{translateY: offset}]}}  >
+                        
                         <Overlay  
                             isClerk = {false}
                             button_1_function = {() => setHistory(true)} 
                             button_2_function = {() => setProfile(true)} 
-                            button_3_function = {() => setSearch(!searching)}
 
                             //style = {{backgroundColor: `rgba(0,0,0,${opacity_1})`}}
 

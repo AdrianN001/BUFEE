@@ -6,6 +6,7 @@ import { Glory_100Thin } from '@expo-google-fonts/dev';
 import AppLoading from 'expo-app-loading';
 import React from 'react';
 import firestore, { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
+import {GestureHandlerRootView, Swipeable} from "react-native-gesture-handler"
 
 
 import { update_liked, get_liked } from '../funcs/firestore';
@@ -46,7 +47,7 @@ function Food(props: any): JSX.Element{  //props-nak nem lehet Interface-t megad
                                 // props.isLiked.then((data: boolean) => setFav(data))
     const [isFav, setFav] = useState<boolean>( props.isLiked );
 
-    console.log(favorites.current)
+    //console.log(favorites.current)
     
     
 
@@ -57,31 +58,39 @@ function Food(props: any): JSX.Element{  //props-nak nem lehet Interface-t megad
         })
    
 
-    return (<View style = {style.container} onLayout = {(evt:any) => {props.getHeight(evt.nativeEvent.layout.height)}}>
-                {false && <View style = {{width:90}}><Image source = {image ?? require("../../assets/icon.png")} style = {style.image} /></View>}
-                
-                <View style = {style.text_container}>
+    return (
+        <GestureHandlerRootView style = {{...style.container,flex:1}}>
+            <Swipeable containerStyle = {{width:"100%",height:"100%"}} onSwipeableWillOpen = {(direction: string) =>{
+        console.log("ASD")
+    }} renderLeftActions  = {() => <Text>AD</Text>}>
+                <View style = {{width:"100%", height:"100%"}} onLayout = {(evt:any) => {props.getHeight(evt.nativeEvent.layout.height)}}>
+                            {false && <View style = {{width:90}}><Image source = {image ?? require("../../assets/icon.png")} style = {style.image} /></View>}
+                            
+                            <View style = {style.text_container}>
 
-                
-                    <Text style = {{...style.name, fontSize:20}}>{name ?? "%Name%"}</Text>
+                            
+                                <Text style = {{...style.name, fontSize:20}}>{name ?? "%Name%"}</Text>
 
 
-                    <Text style = {style.price}>{price ?? "%Price%"}</Text>
+                                <Text style = {style.price}>{price ?? "%Price%"}</Text>
 
-                    <Pressable onPress={() => { props.hearth_function(isFav); 
-                                                console.log(isFav ? "Torolve" : "Hozzaadva")
+                                 {/* <Pressable onPress={() => { props.hearth_function(isFav); 
+                                                            console.log(isFav ? "Torolve" : "Hozzaadva")
 
-                                                !isFav  ? add_item(  Number(props.id), props.om_id  )
-                                                        : remove_item(  Number(props.id), props.om_id  )
+                                                            !isFav  ? add_item(  Number(props.id), props.om_id  )
+                                                                    : remove_item(  Number(props.id), props.om_id  )
 
-                                                setFav(!isFav);
-                                                 }} style = {{width:50, position:'absolute', left:'4%', top:'40%'}}>
-                        <Image source = {isFav ? require("../../assets/red_heart.png") : require("../../assets/white_heart.png")} style = {style.heart}/>
-                    </Pressable>
-                </View>
-                
-                <Pressable  onPress={props.button_function}><View><Image style = {style.tocart} source ={ require("../../assets/to-cart.png")}/></View></Pressable>
-            </View>)
+                                                            setFav(!isFav);
+                                                            }} style = {{width:50, position:'absolute', left:'4%', top:'40%'}}>
+                                    <Image source = {isFav ? require("../../assets/red_heart.png") : require("../../assets/white_heart.png")} style = {style.heart}/>
+                                </Pressable> */}
+                               
+                            </View>
+                            
+                            <Pressable  onPress={props.button_function}><View><Image style = {style.tocart} source ={ require("../../assets/to-cart.png")}/></View></Pressable>
+                    </View>
+            </Swipeable>
+            </GestureHandlerRootView>)
 }
 
 const style = StyleSheet.create(
@@ -93,9 +102,10 @@ const style = StyleSheet.create(
             marginTop:"5%",
             marginRight: "5%",
             marginBottom: 0,
+            width:"100%",
             backgroundColor:"#343333",
             
-            flex: 1, flexDirection: "row", justifyContent:"space-between", width: "97%",
+            flex: 1, flexDirection: "row", justifyContent:"space-between",
             borderRadius: 7,
 
             //box shadowing

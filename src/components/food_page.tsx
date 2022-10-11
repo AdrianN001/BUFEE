@@ -84,6 +84,7 @@ function Food_page(props: any)
             {
                 const loved = adat.docs[0].data().favorites
                 console.log(loved)
+                setFavs(loved)
                 
                 
             })
@@ -122,29 +123,14 @@ function Food_page(props: any)
                                                         
 
                                                         
-                                                        <TouchableOpacity
-                                                                key = {id}
-                                                                onLongPress={
-                                                                    () => {
-                                                                        const bucket_1 = bucket ?? []
-
-                                                                        if (bucket_1.length >= 4)
-                                                                        {
-                                                                            Alert.alert("HIBA", "Legfeljebb 4 dolgot rendelhetsz egyszerre")
-                                                                            return;
-                                                                        }
-
-                                                                        const buy_id = bucket_1.length
-                                                                        setBucket([...bucket_1 , {id, nev, price, image, buy_id}])}
-                                                                }
-                                                                style = {{height: 150}}>
+                                                                        <View style = {{height: 150, width:"100%"}}>
                                                                         <Food key = {id}
 
                                                                         id = {id}
                                                                         favorites = {favs}
 
                                                                         om_id = {om_id}
-
+                                                                        
                                                                         isLiked = { favs.includes(id) }
                                                                         hearth_function = {() => console.log("Gomb megnyomva itt: %i", id)}
 
@@ -164,7 +150,7 @@ function Food_page(props: any)
                                                                             const buy_id = bucket_1.length
                                                                             setBucket([...bucket_1 , {id, nev, price, image, buy_id}])}
                                                                     }  />
-                                                        </TouchableOpacity>)
+                                                                    </View>)
                                                     }
 
 

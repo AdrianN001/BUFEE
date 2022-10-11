@@ -64,7 +64,7 @@ const style = StyleSheet.create(
         tocart:{
             position:'absolute',
             right:"3%",
-            marginTop:"2%",
+            marginTop:"3.5%",
             
             
             height: 30,

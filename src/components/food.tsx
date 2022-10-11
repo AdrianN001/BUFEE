@@ -7,6 +7,7 @@ import AppLoading from 'expo-app-loading';
 import React from 'react';
 import firestore, { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 import {GestureHandlerRootView, Swipeable} from "react-native-gesture-handler"
+import { Animated } from 'react-native';
 
 
 import { update_liked, get_liked } from '../funcs/firestore';
@@ -59,14 +60,47 @@ function Food(props: any): JSX.Element{  //props-nak nem lehet Interface-t megad
    
 
     return (
-        <GestureHandlerRootView style = {{...style.container,flex:1}}>
-            <Swipeable containerStyle = {{width:"100%",height:"100%"}} onSwipeableWillOpen = {(direction: string) =>{
-        console.log("ASD")
-    }} renderLeftActions  = {() => <Text>AD</Text>}>
+        <GestureHandlerRootView style = {{...style.container,flex:1, width:"96%"}}>
+            <Swipeable onSwipeableOpen = {(direction: string) =>{
+                switch(direction){
+                    case "left":
+                        
+                        break;
+                    case "right":
+                        props.button_function();
+                        break;
+                }
+            }}
+
+
+                      renderLeftActions  = {(_, dragX) => {
+                        const trans = dragX.interpolate({
+                            inputRange: [0, 50, 100, 101],
+                            outputRange: [-20, 0, 0, 1],
+                          });
+                        return (
+                        <View style = {{width:"30%", height:"100%", opacity:.7}}>
+                            <Animated.Text style ={{fontFamily:"JetBrains-Mono", marginTop:"40%",color:"white", position:'absolute', alignSelf:"center", transform: [{ translateX: trans }]}}>Kedveltek közé helyezve 💖💖</Animated.Text>
+                        </View>
+                      )}} 
+
+
+                      renderRightActions  = {(_, dragX) => {
+                        const trans = dragX.interpolate({
+                            inputRange: [0, 50, 100, 101],
+                            outputRange: [-20, 0, 0, 1],
+                          });
+                        return (
+                        <View style = {{width:"30%", height:"100%", opacity:.7}}>
+                            <Animated.Text style ={{fontFamily:"JetBrains-Mono", marginTop:"40%",color:"white", position:'absolute', alignSelf:"center", transform: [{ translateX: trans }]}}>Kosárba helyezve 🛒🛒</Animated.Text>
+                        </View>
+                      )}} 
+                      containerStyle = {{width:"100%", height:"100%"}}>
+
                 <View style = {{width:"100%", height:"100%"}} onLayout = {(evt:any) => {props.getHeight(evt.nativeEvent.layout.height)}}>
                             {false && <View style = {{width:90}}><Image source = {image ?? require("../../assets/icon.png")} style = {style.image} /></View>}
                             
-                            <View style = {style.text_container}>
+                            <View style = {{...style.text_container}}>
 
                             
                                 <Text style = {{...style.name, fontSize:20}}>{name ?? "%Name%"}</Text>
@@ -87,9 +121,12 @@ function Food(props: any): JSX.Element{  //props-nak nem lehet Interface-t megad
                                
                             </View>
                             
+                            
                             <Pressable  onPress={props.button_function}><View><Image style = {style.tocart} source ={ require("../../assets/to-cart.png")}/></View></Pressable>
-                    </View>
-            </Swipeable>
+                            
+                        </View>
+                    </Swipeable>
+            
             </GestureHandlerRootView>)
 }
 

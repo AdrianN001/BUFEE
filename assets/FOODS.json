@@ -49,5 +49,31 @@
         "price": 200,
         "image": "asd"
     
+    },
+    {
+        "id":9,
+        "nev":"Pepsi (0.5L)",
+        "price":400,
+        "image":"asd"
+    },{
+        "id":10,
+        "nev":"Pepsi (1L)",
+        "price":500,
+        "image":"asd"
+    },{
+        "id":11,
+        "nev":"Ásványviz (0.5L)",
+        "price":250,
+        "image":"asd"
+    },{
+        "id":12,
+        "nev":"Őszilé (0.1L)",
+        "price":400,
+        "image":"asd"
+    },{
+        "id":13,
+        "nev":"XIXO Tea (1.5L)",
+        "price":450,
+        "image":"asd"
     }
 ]

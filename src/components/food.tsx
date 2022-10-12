@@ -23,6 +23,18 @@ export interface FoodInterface{
     callback?: () => void
 }
 
+const current_favs_includes = (key: number, om_id:string) : Promise < boolean > => {
+    
+    const isLiked = firestore().collection("users").where("om_id", "==", om_id).get().then(adat => {
+
+    
+        return (adat.docs[0].data()["favorites"] as number[]).includes(key)
+    })
+
+    return isLiked
+    
+}
+
 const add_item = async (key: number, om_id: string): Promise < void >  => {
     
     const current_favorites: number[] = await (await firestore().collection("users").where("om_id", "==",om_id).get()).docs[0].data()["favorites"];
@@ -46,7 +58,8 @@ function Food(props: any): JSX.Element{  //props-nak nem lehet Interface-t megad
     const {image, name, price, id, favorites} = props;
 
                                 // props.isLiked.then((data: boolean) => setFav(data))
-    const [isFav, setFav] = useState<boolean>( props.isLiked );
+    const [heart_emoji, setEmoji] = useState<string>("💖💖"); //💔💔
+    
 
     //console.log(favorites.current)
     
@@ -64,10 +77,20 @@ function Food(props: any): JSX.Element{  //props-nak nem lehet Interface-t megad
             <Swipeable onSwipeableOpen = {(direction: string) =>{
                 switch(direction){
                     case "left":
-                        
+                        current_favs_includes(id, props.om_id).then((inc: boolean) => {
+                            if (inc){
+                                remove_item(id, props.om_id)
+                                setEmoji("💔💔")
+                            }else if (!inc){
+                                add_item(id, props.om_id)
+                                setEmoji("💖💖")
+                            }
+                        })
                         break;
                     case "right":
+                        //Jobbra huzasnal kosarba helyezi
                         props.button_function();
+
                         break;
                 }
             }}
@@ -80,7 +103,7 @@ function Food(props: any): JSX.Element{  //props-nak nem lehet Interface-t megad
                           });
                         return (
                         <View style = {{width:"30%", height:"100%", opacity:.7}}>
-                            <Animated.Text style ={{fontFamily:"JetBrains-Mono", marginTop:"40%",color:"white", position:'absolute', alignSelf:"center", transform: [{ translateX: trans }]}}>Kedveltek közé helyezve 💖💖</Animated.Text>
+                            <Animated.Text style ={{fontFamily:"JetBrains-Mono", fontSize:30,  marginTop:"40%",color:"white", position:'absolute', alignSelf:"center", transform: [{ translateX: trans }]}}>{heart_emoji}</Animated.Text>
                         </View>
                       )}} 
 
@@ -92,7 +115,7 @@ function Food(props: any): JSX.Element{  //props-nak nem lehet Interface-t megad
                           });
                         return (
                         <View style = {{width:"30%", height:"100%", opacity:.7}}>
-                            <Animated.Text style ={{fontFamily:"JetBrains-Mono", marginTop:"40%",color:"white", position:'absolute', alignSelf:"center", transform: [{ translateX: trans }]}}>Kosárba helyezve 🛒🛒</Animated.Text>
+                            <Animated.Text style ={{fontFamily:"JetBrains-Mono", fontSize:30,  marginTop:"40%",color:"white", position:'absolute', alignSelf:"center", transform: [{ translateX: trans }]}}> 🛒🛒</Animated.Text>
                         </View>
                       )}} 
                       containerStyle = {{width:"100%", height:"100%"}}>
@@ -103,10 +126,10 @@ function Food(props: any): JSX.Element{  //props-nak nem lehet Interface-t megad
                             <View style = {{...style.text_container}}>
 
                             
-                                <Text style = {{...style.name, fontSize:20}}>{name ?? "%Name%"}</Text>
+                                <Text style = {{...style.name, fontSize:18}}>{name ?? "%Name%"}</Text>
 
 
-                                <Text style = {style.price}>{price ?? "%Price%"}</Text>
+                                <Text style = {style.price}>{`${price}` ?? "%Price%"}</Text>
 
                                  {/* <Pressable onPress={() => { props.hearth_function(isFav); 
                                                             console.log(isFav ? "Torolve" : "Hozzaadva")

@@ -137,7 +137,7 @@ function Food_page(props: any)
                                                                         name = {nev} 
                                                                         
                                                                         getHeight = {(magassag: number) => setFoodHeight(!magassag ? Math.min(magassag, food_height): magassag)}
-                                                                        price = {`${price} Ft`} 
+                                                                        price = {`${price} Ft.`} 
                                                                         button_function = {() => {
                                                                             const bucket_1 = bucket ?? []
 
@@ -168,7 +168,7 @@ function Food_page(props: any)
                 
 
                 <View style = {style.searchengine}>
-                    <Pressable onPress={() => setLoved(!loved)} style = { {width: 60,height:60, left:'110%', bottom:"-100%"} }>
+                    <Pressable onLongPress={() => setLoved(!loved)} style = { {width: 60,height:60, left:'110%', bottom:"-100%"} }>
                         <Image source = {loved ? require("../../assets/red_heart.png") : require("../../assets/white_heart.png")} 
                          style = {{ width: "100%", height:"100%"}}/>
                     </Pressable>
